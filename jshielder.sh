@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#uninstall telnet
+apt-get remove telnet -y;
 
 # JShielder v2.3
 # Linux Hardening Script
