@@ -60,10 +60,25 @@ fi
 
 ##############################################################################################################
 
+# Update Root Password
+
+update_root_password() {
+clear
+f_banner
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo -e "\e[93m[+]\e[00m Please Update Your Root Password!"
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo ""
+    echo -n " Type the new root password: "; read root_password
+   
+    echo -e "$root_password\n$root_password" | passwd root
+    say_done
+}
+
 
 # Configure Hostname
 config_host() {
-echo -n " ¿Do you Wish to Set a HostName? (y/n): "; read config_host
+echo -n " ¿Do you Wish to Set a HostName? (y/n): "; read 
 if [ "$config_host" == "y" ]; then
     serverip=$(__get_ip)
     echo " Type a Name to Identify this server :"
@@ -191,6 +206,7 @@ admin_user(){
     echo ""
     echo -n " Type the new username: "; read username
     adduser $username
+    sudo usermod -a -G sudo $username
     say_done
 }
 
@@ -1221,6 +1237,7 @@ case $choice in
 
 1)
 check_root
+update_root_password
 config_host
 config_timezone
 update_system
@@ -1267,6 +1284,7 @@ reboot_server
 
 2)
 check_root
+update_root_password
 config_host
 config_timezone
 update_system
@@ -1311,6 +1329,7 @@ reboot_server
 
 3)
 check_root
+update_root_password
 config_host
 config_timezone
 update_system
@@ -1353,6 +1372,7 @@ reboot_server
 
 4)
 check_root
+update_root_password
 config_host
 config_timezone
 update_system
@@ -1393,6 +1413,7 @@ reboot_server
 
 5)
 check_root
+update_root_password
 config_host
 config_timezone
 update_system
@@ -1447,6 +1468,7 @@ echo -e "\e[34m-----------------------------------------------------------------
 echo -e "\e[93m[+]\e[00m SELECT THE DESIRED OPTION"
 echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
 echo ""
+echo "0. Update Root Password"
 echo "1. Configure Host Name, Create Legal Banners, Update Hosts Files"
 echo "2. Configure Timezone"
 echo "3. Update System"
@@ -1485,6 +1507,10 @@ echo " "
 
 read menu
 case $menu in
+
+0)
+update_root_password
+;;
 
 1)
 config_host
