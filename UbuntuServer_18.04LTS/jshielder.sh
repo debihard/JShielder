@@ -434,7 +434,7 @@ install_nginx_modsecurity(){
   tar xzvf nginx-1.16.0.tar.gz
   cp ../templates/ngx_http_header_filter_module.c nginx-1.16.0/src/http/ngx_http_header_filter_module.c
   cd nginx-1.16.0/
-  ./configure --user=www-data --group=www-data --with-pcre-jit --with-debug --with-http_ssl_module --add-module=/root/src/ModSecurity/ModSecurity-nginx/
+  ./configure --user=www-data --group=www-data --with-pcre-jit --with-debug --with-http_ssl_module --add-module=/root/src/ModSecurity/ModSecurity-nginx
   make
   make install
   #Replacing Nginx conf with secure Configurations
