@@ -503,7 +503,7 @@ set_nginx_modsec_OwaspRules(){
   cd src/
   wget https://github.com/SpiderLabs/owasp-modsecurity-crs/tarball/master -O owasp.tar.gz
   tar -zxvf owasp.tar.gz
-  owaspdir=$(ls -la | grep SpiderLabs | cut -d ' ' -f18)
+  owaspdir=$(ls -la | grep SpiderLabs | cut -d ' ' -f14)
   cp ModSecurity/modsecurity.conf-recommended /usr/local/nginx/conf/modsecurity.conf
   cp ModSecurity/unicode.mapping /usr/local/nginx/conf/
   cd $owaspdir/
