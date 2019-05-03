@@ -3,6 +3,9 @@
 #uninstall telnet
 apt-get remove telnet -y;
 
+#install additional packages 
+apt install pkg-config -y
+
 # JShielder v2.3
 # Linux Hardening Script
 #
