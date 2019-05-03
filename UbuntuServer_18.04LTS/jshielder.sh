@@ -375,20 +375,30 @@ install_nginx_modsecurity(){
   cd src/
   git clone https://github.com/SpiderLabs/ModSecurity
   cd ModSecurity
-  ./autogen.sh
-  ./configure --enable-standalone-module
+  git clone --depth 1 https://github.com/SpiderLabs/ModSecurity-nginx.git
+  git submodule init
+  git submodule update
+  apt -y install libyajl-dev
+  apt -y install liblua5.3-dev
+  apt -y install liblmdb-dev
+  apt -y install libgeoip-dev
+  apt -y install libmaxminddb-dev
+   ./build.sh
+  ./configure
   make
+  sudo make install
   cd ..
-  wget http://nginx.org/download/nginx-1.9.7.tar.gz
-  tar xzvf nginx-1.9.7.tar.gz
-  cp ../templates/ngx_http_header_filter_module.c nginx-1.9.7/src/http/ngx_http_header_filter_module.c
-  cd nginx-1.9.7/
-  ./configure --user=www-data --group=www-data --with-pcre-jit --with-debug --with-http_ssl_module --add-module=/root/JShielder/UbuntuServer_14.04LTS/src/ModSecurity/nginx/modsecurity
+  wget http://nginx.org/download/nginx-1.16.0.tar.gz
+  tar xzvf nginx-1.16.0.tar.gz
+  cp ../templates/ngx_http_header_filter_module.c nginx-1.16.0/src/http/ngx_http_header_filter_module.c
+  cd nginx-1.16.0/
+  ./configure --user=www-data --group=www-data --with-pcre-jit --with-debug --with-http_ssl_module --add-module=/root/src/ModSecurity/ModSecurity-nginx/
   make
   make install
   #Replacing Nginx conf with secure Configurations
   cp ../../templates/nginx /usr/local/nginx/conf/nginx.conf
   #Jason Giedymin Nginx Init Script
+  apt -y install libpcre3-dev zlib1g-dev
   wget https://raw.github.com/JasonGiedymin/nginx-init-ubuntu/master/nginx -O /etc/init.d/nginx
   chmod +x /etc/init.d/nginx
   update-rc.d nginx defaults
