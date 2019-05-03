@@ -262,7 +262,7 @@ rsa_keycopy(){
 # Add manually the Generated Public Key
 rsa_add(){
 echo -n " Do you want add your user public key mannually? (y/n): "; read rsa_add_answer
-if [ "$rsa_add_answer"== "y" ]; then
+if [ "$rsa_add_answer" == "y" ]; then
 echo -n " Enter your public key here and press enter: ";read publickey
 cat $publickey >> /home/$username/.ssh/authorized_keys
  echo ""
