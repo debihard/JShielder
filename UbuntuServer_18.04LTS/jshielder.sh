@@ -482,7 +482,7 @@ echo " Configure a Virtual Host"
 echo " Type a Name to Identify the Virtual Host"
 echo -n " (For Example: myserver.com) "; read vhost
 touch /usr/local/nginx/conf/sites-available/$vhost
-cd ../..
+#cd ../..
 cat templates/nginxvhost_nophp >> /usr/local/nginx/conf/sites-available/$vhost
 sed -i s/server.com/$vhost/g /usr/local/nginx/conf/sites-available/$vhost
 ln -s /usr/local/nginx/conf/sites-available/$vhost /usr/local/nginx/conf/sites-enabled/$vhost
@@ -753,6 +753,9 @@ install_rootkit_hunter(){
     #cd rkhunter-1.4.6/
     #sh installer.sh --layout /usr --install
     #cd ..
+    sed -i -e 's/WEB_CMD=\"\/bin\/false\"/WEB_CMD=\"\"/g' /etc/rkhunter.conf;
+    sed -i -e 's/UPDATE_MIRRORS=0/UPDATE_MIRRORS=1/g' /etc/rkhunter.conf;
+    sed -i -e 's/MIRRORS_MODE=1/MIRRORS_MODE=0/g' /etc/rkhunter.conf;
     rkhunter --update
     rkhunter --propupd
     echo ""
@@ -965,7 +968,7 @@ echo ""
 echo -n " Do you want to install PSAD (Recommended)? (y/n): " ; read psad_answer
 if [ "$psad_answer" == "y" ]; then
      echo -n " Type an Email Address to Receive PSAD Alerts: " ; read inbox1
-     apt install psad
+     apt -y install psad
      sed -i s/INBOX/$inbox1/g templates/psad.conf
      sed -i s/CHANGEME/$host_name.$domain_name/g templates/psad.conf  
      cp templates/psad.conf /etc/psad/psad.conf
