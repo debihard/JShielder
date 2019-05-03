@@ -224,6 +224,8 @@ admin_user(){
     echo -n " Type the new username: "; read username
     adduser $username
     sudo usermod -a -G sudo $username
+    mkdir /home/$username/.ssh
+    touch /home/$username/.ssh/authorized_keys
     say_done
 }
 
@@ -397,6 +399,7 @@ install_nginx_modsecurity(){
   cd src/
   git clone https://github.com/SpiderLabs/ModSecurity
   cd ModSecurity
+  git clone --depth 1 https://github.com/SpiderLabs/ModSecurity-nginx.git
   git submodule init
   git submodule update
   apt -y install libyajl-dev
