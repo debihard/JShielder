@@ -145,8 +145,8 @@ update_system(){
    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
    echo ""
    apt update
-   apt upgrade -y
-   apt dist-upgrade -y
+   apt -y upgrade
+   apt -y dist-upgrade
    say_done
 }
 
@@ -286,6 +286,9 @@ secure_tmp(){
       echo "Example:"
       echo ""
       echo "/dev/sda4   /tmp   tmpfs  loop,nosuid,noexec,rw  0 0 "
+      echo ""
+      mount
+      echo ""
       say_done
   fi
 }
@@ -339,8 +342,8 @@ install_fail2ban(){
     echo -e "\e[93m[+]\e[00m Installing Fail2Ban"
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
     echo ""
-    apt install sendmail
-    apt install fail2ban
+    apt -y install sendmail
+    apt -y install fail2ban
     say_done
 }
 
@@ -354,7 +357,7 @@ install_secure_mysql(){
     echo -e "\e[93m[+]\e[00m Installing, Configuring and Optimizing MySQL"
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
     echo ""
-    apt install mysql-server
+    apt -y install mysql-server
     echo ""
     echo -n " configuring MySQL............ "
     spinner
@@ -375,7 +378,7 @@ install_apache(){
   echo -e "\e[93m[+]\e[00m Installing Apache Web Server"
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo ""
-  apt install apache2
+  apt -y install apache2
   say_done
 }
 
@@ -389,25 +392,34 @@ install_nginx_modsecurity(){
   echo -e "\e[93m[+]\e[00m Downloading and Compiling Nginx with ModSecurity"
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo ""
-  apt -y install git build-essential libpcre3 libpcre3-dev libssl-dev libtool autoconf apache2-prefork-dev libxml2-dev libcurl4-openssl-dev
+  apt -y install git build-essential libpcre3 libpcre3-dev libssl-dev libtool autoconf apache2-dev libxml2-dev libcurl4-openssl-dev
   mkdir src
   cd src/
   git clone https://github.com/SpiderLabs/ModSecurity
   cd ModSecurity
-  ./autogen.sh
-  ./configure --enable-standalone-module
+  git submodule init
+  git submodule update
+  apt -y install libyajl-dev
+  apt -y install liblua5.3-dev
+  apt -y install liblmdb-dev
+  apt -y install libgeoip-dev
+  apt -y install libmaxminddb-dev
+   ./build.sh
+  ./configure
   make
+  sudo make install
   cd ..
-  wget http://nginx.org/download/nginx-1.9.7.tar.gz
-  tar xzvf nginx-1.9.7.tar.gz
-  cp ../templates/ngx_http_header_filter_module.c nginx-1.9.7/src/http/ngx_http_header_filter_module.c
-  cd nginx-1.9.7/
-  ./configure --user=www-data --group=www-data --with-pcre-jit --with-debug --with-http_ssl_module --add-module=/root/JShielder/UbuntuServer_14.04LTS/src/ModSecurity/nginx/modsecurity
+  wget http://nginx.org/download/nginx-1.16.0.tar.gz
+  tar xzvf nginx-1.16.0.tar.gz
+  cp ../templates/ngx_http_header_filter_module.c nginx-1.16.0/src/http/ngx_http_header_filter_module.c
+  cd nginx-1.16.0/
+  ./configure --user=www-data --group=www-data --with-pcre-jit --with-debug --with-http_ssl_module --add-module=/root/src/ModSecurity/ModSecurity-nginx/
   make
   make install
   #Replacing Nginx conf with secure Configurations
   cp ../../templates/nginx /usr/local/nginx/conf/nginx.conf
   #Jason Giedymin Nginx Init Script
+  apt -y install libpcre3-dev zlib1g-dev
   wget https://raw.github.com/JasonGiedymin/nginx-init-ubuntu/master/nginx -O /etc/init.d/nginx
   chmod +x /etc/init.d/nginx
   update-rc.d nginx defaults
@@ -494,13 +506,13 @@ install_secure_php(){
     echo -e "\e[93m[+]\e[00m Installing, Configuring and Optimizing PHP"
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
     echo ""
-    apt install -y php php-cli php-pear
-    apt install -y php-mysql python-mysqldb libapache2-mod-php7.2
+    apt -y install php php-cli php-pear
+    apt -y install php-mysql python-mysqldb libapache2-mod-php7.2
     echo ""
     echo -n " Replacing php.ini..."
     spinner
-    cp templates/php /etc/php/7.2/apache2/php.ini; echo " OK"
-    cp templates/php /etc/php/7.2/cli/php.ini; echo " OK"
+    cp templates/php /etc/php/7.*/apache2/php.ini; echo " OK"
+    cp templates/php /etc/php/7.*/cli/php.ini; echo " OK"
     service apache2 restart
     say_done
 }
@@ -514,13 +526,13 @@ install_php_nginx(){
   echo -e "\e[93m[+]\e[00m Installing, Configuring and Optimizing PHP/PHP-FPM"
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo ""
-  apt install php-fpm php php-cli php-pear
-  apt install php-mysql python-mysqldb
+  apt -y install php-fpm php php-cli php-pear
+  apt -y install php-mysql python-mysqldb
   echo ""
   echo -n " Replacing php.ini..."
   spinner
-  cp templates/php /etc/php/7.0/cli/php.ini; echo " OK"
-  cp templates/phpnginx /etc/php/7.0/fpm/php.ini; echo "OK"
+  cp templates/php /etc/php/7.*/cli/php.ini; echo " OK"
+  cp templates/phpnginx /etc/php/7.*/fpm/php.ini; echo "OK"
   service php-fpm restart
   service nginx restart
   say_done
@@ -536,9 +548,9 @@ install_modsecurity(){
     echo -e "\e[93m[+]\e[00m Installing ModSecurity"
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
     echo ""
-    apt install libxml2 libxml2-dev libxml2-utils
-    apt install libaprutil1 libaprutil1-dev
-    apt install libapache2-mod-security2
+    apt -y install libxml2 libxml2-dev libxml2-utils
+    apt -y install libaprutil1 libaprutil1-dev
+    apt -y install libapache2-mod-security2
     service apache2 restart
     say_done
 }
@@ -605,7 +617,7 @@ install_modevasive(){
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
     echo ""
     echo -n " Type Email to Receive Alerts "; read inbox
-    apt install libapache2-mod-evasive
+    apt -y install libapache2-mod-evasive
     mkdir /var/log/mod_evasive
     chown www-data:www-data /var/log/mod_evasive/
     sed s/MAILTO/$inbox/g templates/mod-evasive > /etc/apache2/mods-available/mod-evasive.conf
@@ -715,9 +727,10 @@ install_rootkit_hunter(){
           - Look for hidden files
           - Optional scan within plaintext and binary files "
     sleep 1
-    cd rkhunter-1.4.6/
-    sh installer.sh --layout /usr --install
-    cd ..
+    apt -y install rkhunter
+    #cd rkhunter-1.4.6/
+    #sh installer.sh --layout /usr --install
+    #cd ..
     rkhunter --update
     rkhunter --propupd
     echo ""
@@ -792,7 +805,7 @@ install_portsentry(){
     echo -e "\e[93m[+]\e[00m Installing PortSentry"
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
     echo ""
-    apt install portsentry
+    apt -y install portsentry
     mv /etc/portsentry/portsentry.conf /etc/portsentry/portsentry.conf-original
     cp templates/portsentry /etc/portsentry/portsentry.conf
     sed s/tcp/atcp/g /etc/default/portsentry > salida.tmp
@@ -843,7 +856,7 @@ additional_hardening(){
     chmod 600 /boot/grub/grub.cfg
     #Remove AT and Restrict Cron
     apt purge at
-    apt install -y libpam-cracklib
+    apt -y install libpam-cracklib
     echo ""
     echo " Securing Cron "
     spinner
@@ -1027,7 +1040,7 @@ enable_proc_acct(){
   echo -e "\e[93m[+]\e[00m Enable Process Accounting"
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo ""
-  apt install acct
+  apt -y install acct
   touch /var/log/wtmp
   echo "OK"
 }
@@ -1065,7 +1078,7 @@ install_auditd(){
   echo -e "\e[93m[+]\e[00m Installing auditd"
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo ""
-  apt install auditd
+  apt -y install auditd
 
   # Using CIS Benchmark configuration
   
@@ -1106,7 +1119,7 @@ install_sysstat(){
   echo -e "\e[93m[+]\e[00m Installing and enabling sysstat"
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo ""
-  apt install sysstat
+  apt -y install sysstat
   sed -i 's/ENABLED="false"/ENABLED="true"/g' /etc/default/sysstat
   service sysstat start
   echo "OK"
@@ -1130,7 +1143,7 @@ install_arpwatch(){
   if [ "$arp_answer" == "y" ]; then
      echo "Installing ArpWatch"
      spinner
-     apt install -y arpwatch
+     apt -y install arpwatch
      systemctl enable arpwatch.service
      service arpwatch start
      echo "OK"
