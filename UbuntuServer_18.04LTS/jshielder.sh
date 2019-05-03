@@ -692,16 +692,17 @@ additional_packages(){
     echo -e "\e[93m[+]\e[00m Installing Additional Packages"
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
     echo ""
-    echo "Install tree............."; apt install tree
-    echo "Install Python-MySQLdb..."; apt install python-mysqldb
-    echo "Install WSGI............."; apt install libapache2-mod-wsgi
-    echo "Install PIP.............."; apt install python-pip
-    echo "Install Vim.............."; apt install vim
-    echo "Install Nano............."; apt install nano
-    echo "Install pear............."; apt install php-pear
-    echo "Install DebSums.........."; apt install debsums
-    echo "Install apt-show-versions"; apt install apt-show-versions
+    echo "Install tree............."; apt -y install tree
+    echo "Install Python-MySQLdb..."; apt -y install python-mysqldb
+    echo "Install WSGI............."; apt -y install libapache2-mod-wsgi
+    echo "Install PIP.............."; apt -y install python-pip
+    echo "Install Vim.............."; apt -y install vim
+    echo "Install Nano............."; apt -y install nano
+    echo "Install pear............."; apt -y install php-pear
+    echo "Install DebSums.........."; apt -y install debsums
+    echo "Install apt-show-versions"; apt -y install apt-show-versions
     echo "Install PHPUnit..........";
+    cd /root/JShielder/UbuntuServer_18.04LTS
     pear config-set auto_discover 1
     mv phpunit-patched /usr/share/phpunit
     echo include_path = ".:/usr/share/phpunit:/usr/share/phpunit/PHPUnit" >> /etc/php/7.2/cli/php.ini
