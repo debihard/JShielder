@@ -1,11 +1,5 @@
 #!/bin/bash
 
-#uninstall telnet
-apt-get remove telnet -y;
-
-#install additional packages 
-apt install pkg-config -y
-
 # JShielder v2.3
 # Linux Hardening Script
 #
@@ -55,6 +49,12 @@ else
       f_banner
 fi
 
+#uninstall telnet
+apt -y remove telnet
+
+#install additional packages 
+apt -y install pkg-config
+apt -y install software-properties-common
 
 menu=""
 until [ "$menu" = "10" ]; do
