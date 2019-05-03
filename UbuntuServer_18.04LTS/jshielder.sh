@@ -259,7 +259,24 @@ rsa_keycopy(){
     say_done
 }
 ##############################################################################################################
-
+# Add manually the Generated Public Key
+rsa_add(){
+echo -n " Do you want add your user public key mannually? (y/n): "; read rsa_add_answer
+if [ "$rsa_add_answer"== "y" ]; then
+echo -n " Enter your public key here and press enter: ";read publickey
+cat $publickey >> /home/$username/.ssh/authorized_keys
+ echo ""
+  echo "Your key is successfully add!"
+      say_done   
+      
+ else
+ echo ""
+ echo "Ok"
+ say_done
+ fi
+ }
+    
+##############################################################################################################
 #Securing /tmp Folder
 secure_tmp(){
   clear
@@ -925,7 +942,7 @@ install_tiger(){
 ##############################################################################################################
 
 #Install PSAD
-#PSAD actively monitors firewall logs to determine if a scan or attack is taking place
+#PSAD actively monitors firewall logs to determine a scan or attack is taking place
 install_psad(){
 clear
 f_banner
@@ -1302,6 +1319,7 @@ unused_filesystems
 uncommon_netprotocols
 admin_user
 rsa_keygen
+rsa_add
 rsa_keycopy
 secure_ssh
 set_iptables
@@ -1350,6 +1368,7 @@ unused_filesystems
 uncommon_netprotocols
 admin_user
 rsa_keygen
+rsa_add
 rsa_keycopy
 secure_ssh
 set_iptables
@@ -1396,6 +1415,7 @@ unused_filesystems
 uncommon_netprotocols
 admin_user
 rsa_keygen
+rsa_add
 rsa_keycopy
 secure_ssh
 set_iptables
@@ -1440,6 +1460,7 @@ unused_filesystems
 uncommon_netprotocols
 admin_user
 rsa_keygen
+rsa_add
 rsa_keycopy
 secure_ssh
 set_iptables
@@ -1482,6 +1503,7 @@ unused_filesystems
 uncommon_netprotocols
 admin_user
 rsa_keygen
+rsa_add
 rsa_keycopy
 secure_ssh
 set_iptables
@@ -1562,6 +1584,7 @@ echo "30. Set More Restrictive UMASK Value (027)"
 echo "31. Secure /tmp Directory"
 echo "32. Install PSAD IDS"
 echo "33. Set GRUB Bootloader Password"
+echo "36. Add rsa key to current user mannually"
 echo "34. Exit"
 echo " "
 
@@ -1718,6 +1741,10 @@ set_grubpassword
 
 34)
 break ;;
+
+36)
+rsa_add
+;;
 
 *) ;;
 
