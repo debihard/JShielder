@@ -64,7 +64,7 @@ logpath  = /var/log/apache*/*error.log
 maxretry = 6
 
 [apache-multiport]
-enabled   = true
+enabled   = false
 port      = http,https
 filter    = apache-auth
 logpath   = /var/log/apache*/*error.log
