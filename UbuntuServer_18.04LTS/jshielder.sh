@@ -571,6 +571,7 @@ install_modsecurity(){
     apt -y install libxml2 libxml2-dev libxml2-utils
     apt -y install libaprutil1 libaprutil1-dev
     apt -y install libapache2-mod-security2
+    
     service apache2 restart
     say_done
 }
@@ -586,17 +587,18 @@ set_owasp_rules(){
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
     echo ""
 
-    #for archivo in /usr/share/modsecurity-crs/base_rules/*
-     #   do ln -s $archivo /usr/share/modsecurity-crs/activated_rules/
-    #done
+    for archivo in /usr/share/modsecurity-crs/base_rules/*
+        do ln -s $archivo /usr/share/modsecurity-crs/activated_rules/
+    done
 
-    #for archivo in /usr/share/modsecurity-crs/optional_rules/*
-    #    do ln -s $archivo /usr/share/modsecurity-crs/activated_rules/
-    #done
+    for archivo in /usr/share/modsecurity-crs/optional_rules/*
+        do ln -s $archivo /usr/share/modsecurity-crs/activated_rules/
+    done
     spinner
     echo "OK"
 
     sed s/SecRuleEngine\ DetectionOnly/SecRuleEngine\ On/g /etc/modsecurity/modsecurity.conf-recommended > salida
+    sed -i -e 's/SecStatusEngine On/SecStatusEngine Off/g' salida
     mv salida /etc/modsecurity/modsecurity.conf
 
     echo 'SecServerSignature "AntiChino Server 1.0.4 LS"' >> /usr/share/modsecurity-crs/modsecurity_crs_10_setup.conf
