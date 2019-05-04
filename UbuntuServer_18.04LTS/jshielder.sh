@@ -977,6 +977,10 @@ if [ "$psad_answer" == "y" ]; then
      echo "Installation and Configuration Complete"
      echo "Run service psad status, for detected events"
      echo ""
+     iptables -I FORWARD 1 -j LOG --log-prefix "Iptables: "
+     iptables -I INPUT 1 -j LOG --log-prefix "Iptables: "
+     echo "Iptables logging successfully done!"
+     echo ""
      say_done
 else
      echo "OK"
