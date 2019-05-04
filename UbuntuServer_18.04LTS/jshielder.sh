@@ -223,7 +223,6 @@ admin_user(){
     echo ""
     echo -n " Type the new username: "; read username
     adduser $username
-    sudo usermod -a -G sudo $username
     mkdir /home/$username/.ssh
     touch /home/$username/.ssh/authorized_keys
     say_done
