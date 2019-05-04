@@ -49,9 +49,6 @@ else
       f_banner
 fi
 
-#uninstall telnet
-apt -y remove telnet
-
 #install additional packages 
 apt -y install pkg-config
 apt -y install software-properties-common
@@ -67,38 +64,27 @@ echo -e "\e[34m-----------------------------------------------------------------
 echo -e "\e[93m[+]\e[00m SELECT YOUR LINUX DISTRIBUTION"
 echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
 echo ""
-echo "1. Ubuntu Server 14.04 LTS"
-echo "2. Ubuntu Server 16.04 LTS"
-echo "3. Ubuntu Server 18.04 LTS"
-echo "4. Linux CentOS 7 (Coming Soon)"
-echo "5. Debian GNU/Linux 8 (Coming Soon)"
-echo "6. Debian GNU/Linux 9 (Coming Soon)"
-echo "7. Red Hat Linux 7 (Coming Soon)"
-echo "8. Exit"
+echo "1. Ubuntu Server 16.04 LTS"
+echo "2. Ubuntu Server 18.04 LTS"
+echo "3. Exit"
 echo
 
 read menu
 case $menu in
 
 1)
-cd UbuntuServer_14.04LTS/
-chmod +x jshielder.sh
-./jshielder.sh
-;;
-
-2)
 cd UbuntuServer_16.04LTS/
 chmod +x jshielder.sh
 ./jshielder.sh
 ;;
 
-3)
+2)
 cd UbuntuServer_18.04LTS/
 chmod +x jshielder.sh
 ./jshielder.sh
 ;;
 
-8)
+3)
 break
 ;;
 
