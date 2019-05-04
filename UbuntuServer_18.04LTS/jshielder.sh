@@ -611,7 +611,7 @@ set_owasp_rules(){
     mkdir /usr/share/modsecurity-crs/activated_rules
     
     #echo -e '# ModSecurity Core Rule Set (CRS)\nIncludeOptional /usr/share/modsecurity-crs/*.conf\nIncludeOptional /usr/share/modsecurity-crs/activated_rules/*.conf' >> 
-    echo -e '# ModSecurity Core Rule Set (CRS)\nIncludeOptional /usr/share/modsecurity-crs/*.conf\nIncludeOptional >> /etc/modsecurity/modsecurity.conf
+    echo -e '# ModSecurity Core Rule Set (CRS)\nIncludeOptional /usr/share/modsecurity-crs/*.conf\nIncludeOptional /usr/share/modsecurity-crs/activated_rules/*.conf' >> /etc/modsecurity/modsecurity.conf
     CSRD=/usr/share/modsecurity-crs; for e in $CSRD/base_rules/*.conf; do sudo ln -s $e $CSRD/activated_rules/; done
     
     # check that rules are enabled
