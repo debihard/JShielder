@@ -617,13 +617,26 @@ set_owasp_rules(){
     # check that rules are enabled
     ls /usr/share/modsecurity-crs/activated_rules/*.conf
     
+    #enable optional_rules
+    CSRD=/usr/share/modsecurity-crs; for e in $CSRD/optional_rules/*.conf; do sudo ln -s $e $CSRD/activated_rules/; done
+    
     #enable experimental rules
-    CSRD=/usr/share/modsecurity-crs; for e in $CSRD/experimental_rules/*.conf; do sudo ln -s $e $CSRD/activated_rules/; done
+    #CSRD=/usr/share/modsecurity-crs; for e in $CSRD/experimental_rules/*.conf; do sudo ln -s $e $CSRD/activated_rules/; done
+    
+    #enable slr_rules
+    CSRD=/usr/share/modsecurity-crs; for e in $CSRD/slr_rules/*.conf; do sudo ln -s $e $CSRD/activated_rules/; done
     
     # check that rules are enabled
     ls /usr/share/modsecurity-crs/activated_rules/*.conf
     
     apache2ctl -t && apache2ctl restart
+    
+    #Disable Rules
+    #To disable rules, delete the symlink within the activated_rules directory that pertains to the rule in question. Once deleted, a quick restart of Apache services is necessary to make the change active.
+    #Example: Delete the application_defects rule then restart Apache.
+    #sudo rm -rf /usr/share/modsecurity-crs/activated_rules/modsecurity_crs_55_application_defects.conf
+    #apache2ctl restart
+    
     
     #sed s/SecRuleEngine\ DetectionOnly/SecRuleEngine\ On/g /etc/modsecurity/modsecurity.conf-recommended > salida
     #sed -i -e 's/SecStatusEngine On/SecStatusEngine Off/g' salida
