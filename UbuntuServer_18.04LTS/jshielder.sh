@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # JShielder v2.3
 # Deployer for Ubuntu Server 18.04 LTS
 #
@@ -587,19 +586,48 @@ set_owasp_rules(){
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
     echo ""
 
-    for archivo in /usr/share/modsecurity-crs/base_rules/*
-        do ln -s $archivo /usr/share/modsecurity-crs/activated_rules/
-    done
+    #for archivo in /usr/share/modsecurity-crs/base_rules/*
+    #    do ln -s $archivo /usr/share/modsecurity-crs/activated_rules/
+    #done
 
-    for archivo in /usr/share/modsecurity-crs/optional_rules/*
-        do ln -s $archivo /usr/share/modsecurity-crs/activated_rules/
-    done
+    #for archivo in /usr/share/modsecurity-crs/optional_rules/*
+    #    do ln -s $archivo /usr/share/modsecurity-crs/activated_rules/
+    #done
+    
     spinner
     echo "OK"
 
-    sed s/SecRuleEngine\ DetectionOnly/SecRuleEngine\ On/g /etc/modsecurity/modsecurity.conf-recommended > salida
-    sed -i -e 's/SecStatusEngine On/SecStatusEngine Off/g' salida
-    mv salida /etc/modsecurity/modsecurity.conf
+
+
+
+    cp /etc/modsecurity/modsecurity.conf{-recommended,}
+    sed -i -e 's/DetectionOnly$/On/i' /etc/modsecurity/modsecurity.conf
+    sed -i -e 's/SecStatusEngine On/SecStatusEngine Off/g' /etc/modsecurity/modsecurity.conf
+    
+    apache2ctl -t && apache2ctl restart
+    
+    mv /usr/share/modsecurity-crs /usr/share/modsecurity-crs.bk
+    git clone https://github.com/SpiderLabs/owasp-modsecurity-crs.git /usr/share/modsecurity-crs
+    
+    
+    #echo -e '# ModSecurity Core Rule Set (CRS)\nIncludeOptional /usr/share/modsecurity-crs/*.conf\nIncludeOptional /usr/share/modsecurity-crs/activated_rules/*.conf' >> 
+    echo -e '# ModSecurity Core Rule Set (CRS)\nIncludeOptional /usr/share/modsecurity-crs/*.conf\nIncludeOptional /usr/share/modsecurity-crs/activated_rules/*.conf' >> /etc/modsecurity/modsecurity.conf
+    CSRD=/usr/share/modsecurity-crs; for e in $CSRD/base_rules/*.conf; do sudo ln -s $e $CSRD/activated_rules/; done
+    
+    # check that rules are enabled
+    ls /usr/share/modsecurity-crs/activated_rules/*.conf
+    
+    #enable experimental rules
+    CSRD=/usr/share/modsecurity-crs; for e in $CSRD/experimental_rules/*.conf; do sudo ln -s $e $CSRD/activated_rules/; done
+    
+    # check that rules are enabled
+    ls /usr/share/modsecurity-crs/activated_rules/*.conf
+    
+    apache2ctl -t && apache2ctl restart
+    
+    #sed s/SecRuleEngine\ DetectionOnly/SecRuleEngine\ On/g /etc/modsecurity/modsecurity.conf-recommended > salida
+    #sed -i -e 's/SecStatusEngine On/SecStatusEngine Off/g' salida
+    #mv salida /etc/modsecurity/modsecurity.conf
 
     echo 'SecServerSignature "AntiChino Server 1.0.4 LS"' >> /usr/share/modsecurity-crs/modsecurity_crs_10_setup.conf
     echo 'Header set X-Powered-By "Plankalkül 1.0"' >> /usr/share/modsecurity-crs/modsecurity_crs_10_setup.conf
