@@ -164,3 +164,12 @@ port     = domain,953
 protocol = tcp
 filter   = named-refused
 logpath  = /var/log/named/security.log
+
+[arpwatch]
+enabled = true
+filter =
+failregex = ^\s*\S+\s+arpwatch: changed ethernet address <HOST>
+#logpath = %(syslog_local0)s
+logpath = /var/log/syslog
+#findtime  = 600
+#maxretry = 5
