@@ -57,28 +57,28 @@ logpath  = /var/log/auth.log
 maxretry = 6
 
 [apache]
-enabled  = false
+enabled  = true
 port     = http,https
 filter   = apache-auth
 logpath  = /var/log/apache*/*error.log
 maxretry = 6
 
 [apache-multiport]
-enabled   = false
+enabled   = true
 port      = http,https
 filter    = apache-auth
 logpath   = /var/log/apache*/*error.log
 maxretry  = 6
 
 [apache-noscript]
-enabled  = false
+enabled  = true
 port     = http,https
 filter   = apache-noscript
 logpath  = /var/log/apache*/*error.log
 maxretry = 6
 
 [apache-overflows]
-enabled  = false
+enabled  = true
 port     = http,https
 filter   = apache-overflows
 logpath  = /var/log/apache*/*error.log
