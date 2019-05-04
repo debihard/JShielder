@@ -972,6 +972,7 @@ if [ "$psad_answer" == "y" ]; then
      sed -i s/INBOX/$inbox1/g templates/psad.conf
      sed -i s/CHANGEME/$host_name.$domain_name/g templates/psad.conf  
      cp templates/psad.conf /etc/psad/psad.conf
+     echo -e "127.0.0.1 0\n127.0.0.53 0" >> /etc/psad/auto_dl
      psad --sig-update
      service psad restart
      echo "Installation and Configuration Complete"
