@@ -567,15 +567,37 @@ install_modsecurity(){
     echo -e "\e[93m[+]\e[00m Installing ModSecurity"
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
     echo ""
-    apt -y install libxml2 libxml2-dev libxml2-utils
-    apt -y install libaprutil1 libaprutil1-dev
-    #apt -y install libapache2-mod-security2
     
-    git clone https://github.com/SpiderLabs/ModSecurity-apache.git
-    ./autogen.sh
-    ./configure
-    make
-    make install
+    apt -y install libapache2-mod-security2
+    
+    #apt -y install libxml2 libxml2-dev libxml2-utils
+    #apt -y install libaprutil1 libaprutil1-dev
+    #apt -y install git build-essential libpcre3 libpcre3-dev libssl-dev libtool autoconf apache2-dev libxml2-dev  libcurlpp-dev libcurl4-openssl-dev automake pkgconf
+    #mkdir src
+    #cd src/
+    #git clone https://github.com/SpiderLabs/ModSecurity
+    #cd ModSecurity
+    #git clone --depth 1 https://github.com/SpiderLabs/ModSecurity-nginx.git
+    #git submodule init
+    #git submodule update
+    #apt -y install libyajl-dev
+    #apt -y install liblua5.3-dev
+    #apt -y install liblmdb-dev
+    #apt -y install libgeoip-dev
+    #apt -y install libmaxminddb-dev
+    
+    #./build.sh
+    #./configure
+    #make
+    #make install
+    #cd ..
+    
+    #git clone https://github.com/SpiderLabs/ModSecurity-apache.git
+    #cd ModSecurity-apache/
+    #./autogen.sh
+    #./configure
+    #make
+    #make install
     
     service apache2 restart
     say_done
@@ -603,22 +625,39 @@ set_owasp_rules(){
     spinner
     echo "OK"
 
-
-
-
+    apt -y install modsecurity-crs
+    
     cp /etc/modsecurity/modsecurity.conf{-recommended,}
+    
     sed -i -e 's/DetectionOnly$/On/i' /etc/modsecurity/modsecurity.conf
     sed -i -e 's/SecStatusEngine On/SecStatusEngine Off/g' /etc/modsecurity/modsecurity.conf
-    
-    apache2ctl -t && apache2ctl restart
-    
+   
     mv /usr/share/modsecurity-crs /usr/share/modsecurity-crs.bk
-    git clone https://github.com/SpiderLabs/owasp-modsecurity-crs.git /usr/share/modsecurity-crs
-    mkdir /usr/share/modsecurity-crs/activated_rules
+    
+    
+      for archivo in /usr/share/modsecurity-crs/base_rules/*
+        do ln -s $archivo /usr/share/modsecurity-crs/activated_rules/
+    done
+
+    for archivo in /usr/share/modsecurity-crs/optional_rules/*
+        do ln -s $archivo /usr/share/modsecurity-crs/activated_rules/
+    done
+    
+    
+    #cd /usr/share/modsecurity-crs/base_rules/
+    #for ruleFile in * ; do sudo ln -s /usr/share/modsecurity-crs/base_rules/$ruleFile /etc/modsecurity/$ruleFile ; done
+    
+    #cd /usr/share/modsecurity-crs/optional_rules/
+    #for ruleFile in * ; do sudo ln -s /usr/share/modsecurity-crs/optional_rules/$ruleFile /etc/modsecurity/$ruleFile ; done
+    
+    #cp /usr/share/modsecurity-crs/modsecurity_crs_10_setup.conf /etc/modsecurity/modsecurity_crs_10_setup.conf
+    
+    #git clone https://github.com/SpiderLabs/owasp-modsecurity-crs.git /usr/share/modsecurity-crs
+    #mkdir /usr/share/modsecurity-crs/activated_rules
     
     #echo -e '# ModSecurity Core Rule Set (CRS)\nIncludeOptional /usr/share/modsecurity-crs/*.conf\nIncludeOptional /usr/share/modsecurity-crs/activated_rules/*.conf' >> 
-    echo -e '# ModSecurity Core Rule Set (CRS)\nIncludeOptional /usr/share/modsecurity-crs/*.conf\nIncludeOptional /usr/share/modsecurity-crs/activated_rules/*.conf' >> /etc/modsecurity/modsecurity.conf
-    CSRD=/usr/share/modsecurity-crs; for e in $CSRD/rules/*.conf; do sudo ln -s $e $CSRD/activated_rules/; done
+    #echo -e '# ModSecurity Core Rule Set (CRS)\nIncludeOptional /usr/share/modsecurity-crs/*.conf\nIncludeOptional /usr/share/modsecurity-crs/activated_rules/*.conf' >> /etc/modsecurity/modsecurity.conf
+    #CSRD=/usr/share/modsecurity-crs; for e in $CSRD/rules/*.conf; do sudo ln -s $e $CSRD/activated_rules/; done
     
     # check that rules are enabled
     ls /usr/share/modsecurity-crs/activated_rules/*.conf
@@ -633,9 +672,9 @@ set_owasp_rules(){
     #CSRD=/usr/share/modsecurity-crs; for e in $CSRD/slr_rules/*.conf; do sudo ln -s $e $CSRD/activated_rules/; done
     
     # check that rules are enabled
-    ls /usr/share/modsecurity-crs/activated_rules/*.conf
+    #ls /usr/share/modsecurity-crs/activated_rules/*.conf
     
-    apache2ctl -t && apache2ctl restart
+    #apache2ctl -t && apache2ctl restart
     
     #Disable Rules
     #To disable rules, delete the symlink within the activated_rules directory that pertains to the rule in question. Once deleted, a quick restart of Apache services is necessary to make the change active.
@@ -653,7 +692,8 @@ set_owasp_rules(){
     echo 'Header set X-Mamma "Mama mia let me go"' >> /usr/share/modsecurity-crs/modsecurity_crs_10_setup.conf
 
     a2enmod headers
-    service apache2 restart
+    a2enmod security2
+    apache2ctl -t && apache2ctl restart
     say_done
 }
 
