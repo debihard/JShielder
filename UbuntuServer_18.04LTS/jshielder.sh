@@ -632,16 +632,16 @@ set_owasp_rules(){
     sed -i -e 's/DetectionOnly$/On/i' /etc/modsecurity/modsecurity.conf
     sed -i -e 's/SecStatusEngine On/SecStatusEngine Off/g' /etc/modsecurity/modsecurity.conf
    
-    mv /usr/share/modsecurity-crs /usr/share/modsecurity-crs.bk
+    #mv /usr/share/modsecurity-crs /usr/share/modsecurity-crs.bk
     mkdir /usr/share/modsecurity-crs/activated_rules
     
-      for archivo in /usr/share/modsecurity-crs/base_rules/*
-        do ln -s $archivo /usr/share/modsecurity-crs/activated_rules/
-    done
+    #  for archivo in /usr/share/modsecurity-crs/base_rules/*
+    #    do ln -s $archivo /usr/share/modsecurity-crs/activated_rules/
+    #done
 
-    for archivo in /usr/share/modsecurity-crs/optional_rules/*
-        do ln -s $archivo /usr/share/modsecurity-crs/activated_rules/
-    done
+    #for archivo in /usr/share/modsecurity-crs/optional_rules/*
+    #    do ln -s $archivo /usr/share/modsecurity-crs/activated_rules/
+    #done
     
     
     #cd /usr/share/modsecurity-crs/base_rules/
@@ -660,7 +660,7 @@ set_owasp_rules(){
     #CSRD=/usr/share/modsecurity-crs; for e in $CSRD/rules/*.conf; do sudo ln -s $e $CSRD/activated_rules/; done
     
     # check that rules are enabled
-    ls /usr/share/modsecurity-crs/activated_rules/*.conf
+    #ls /usr/share/modsecurity-crs/activated_rules/*.conf
     
     #enable optional_rules
     #CSRD=/usr/share/modsecurity-crs; for e in $CSRD/optional_rules/*.conf; do sudo ln -s $e $CSRD/activated_rules/; done
