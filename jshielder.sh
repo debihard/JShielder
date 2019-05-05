@@ -52,6 +52,7 @@ fi
 #install additional packages 
 apt -y install pkg-config
 apt -y install software-properties-common
+apt -y install screen
 
 menu=""
 until [ "$menu" = "10" ]; do
