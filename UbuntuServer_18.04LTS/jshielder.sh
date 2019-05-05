@@ -612,19 +612,19 @@ set_owasp_rules(){
     
     #echo -e '# ModSecurity Core Rule Set (CRS)\nIncludeOptional /usr/share/modsecurity-crs/*.conf\nIncludeOptional /usr/share/modsecurity-crs/activated_rules/*.conf' >> 
     echo -e '# ModSecurity Core Rule Set (CRS)\nIncludeOptional /usr/share/modsecurity-crs/*.conf\nIncludeOptional /usr/share/modsecurity-crs/activated_rules/*.conf' >> /etc/modsecurity/modsecurity.conf
-    CSRD=/usr/share/modsecurity-crs; for e in $CSRD/base_rules/*.conf; do sudo ln -s $e $CSRD/activated_rules/; done
+    CSRD=/usr/share/modsecurity-crs; for e in $CSRD/rules/*.conf; do sudo ln -s $e $CSRD/activated_rules/; done
     
     # check that rules are enabled
     ls /usr/share/modsecurity-crs/activated_rules/*.conf
     
     #enable optional_rules
-    CSRD=/usr/share/modsecurity-crs; for e in $CSRD/optional_rules/*.conf; do sudo ln -s $e $CSRD/activated_rules/; done
+    #CSRD=/usr/share/modsecurity-crs; for e in $CSRD/optional_rules/*.conf; do sudo ln -s $e $CSRD/activated_rules/; done
     
     #enable experimental rules
     #CSRD=/usr/share/modsecurity-crs; for e in $CSRD/experimental_rules/*.conf; do sudo ln -s $e $CSRD/activated_rules/; done
     
     #enable slr_rules
-    CSRD=/usr/share/modsecurity-crs; for e in $CSRD/slr_rules/*.conf; do sudo ln -s $e $CSRD/activated_rules/; done
+    #CSRD=/usr/share/modsecurity-crs; for e in $CSRD/slr_rules/*.conf; do sudo ln -s $e $CSRD/activated_rules/; done
     
     # check that rules are enabled
     ls /usr/share/modsecurity-crs/activated_rules/*.conf
