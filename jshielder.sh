@@ -85,9 +85,7 @@ chmod +x jshielder.sh
 cd UbuntuServer_18.04LTS/
 chmod +x jshielder.sh
 #screen -S jshielder /root/JShielder/UbuntuServer_18.04LTS/jshielder.sh
-screen -dmS jshielder
-screen -S jshielder -p 0 -X stuff '/root/JShielder/UbuntuServer_18.04LTS/jshielder.sh'
-#./jshielder.sh
+./jshielder.sh
 ;;
 
 3)
