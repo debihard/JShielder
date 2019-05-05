@@ -569,7 +569,13 @@ install_modsecurity(){
     echo ""
     apt -y install libxml2 libxml2-dev libxml2-utils
     apt -y install libaprutil1 libaprutil1-dev
-    apt -y install libapache2-mod-security2
+    #apt -y install libapache2-mod-security2
+    
+    git clone https://github.com/SpiderLabs/ModSecurity-apache.git
+    ./autogen.sh
+    ./configure
+    make
+    make install
     
     service apache2 restart
     say_done
