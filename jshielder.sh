@@ -76,13 +76,18 @@ case $menu in
 1)
 cd UbuntuServer_16.04LTS/
 chmod +x jshielder.sh
-screen -S jshielder /root/JShielder/UbuntuServer_16.04LTS/jshielder.sh
+#screen -S jshielder /root/JShielder/UbuntuServer_16.04LTS/jshielder.sh
+
+./jshielder.sh
 ;;
 
 2)
 cd UbuntuServer_18.04LTS/
 chmod +x jshielder.sh
-screen -S jshielder /root/JShielder/UbuntuServer_18.04LTS/jshielder.sh
+#screen -S jshielder /root/JShielder/UbuntuServer_18.04LTS/jshielder.sh
+screen -dmS jshielder
+screen -S jshielder -p 0 -X stuff '/root/JShielder/UbuntuServer_18.04LTS/jshielder.sh'
+#./jshielder.sh
 ;;
 
 3)
