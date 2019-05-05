@@ -633,7 +633,7 @@ set_owasp_rules(){
     sed -i -e 's/SecStatusEngine On/SecStatusEngine Off/g' /etc/modsecurity/modsecurity.conf
    
     mv /usr/share/modsecurity-crs /usr/share/modsecurity-crs.bk
-    
+    mkdir /usr/share/modsecurity-crs/activated_rules
     
       for archivo in /usr/share/modsecurity-crs/base_rules/*
         do ln -s $archivo /usr/share/modsecurity-crs/activated_rules/
