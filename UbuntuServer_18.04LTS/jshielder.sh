@@ -388,6 +388,78 @@ install_secure_mysql(){
 
 ##############################################################################################################
 
+# Create mysql user and data base
+
+create__mysql_user_db(){
+    clear
+    f_banner
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo -e "\e[93m[+]\e[00m Create MySQL user and database"
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo ""
+
+#!/bin/bash
+# Bash script written by Saad Ismail - me@saadismail.net
+
+# If /root/.my.cnf exists then it won't ask for root password
+if [ -f /root/.my.cnf ]; then
+	echo "Please enter the NAME of the new WordPress database! (example: database1)"
+	read dbname
+	echo "Please enter the WordPress database CHARACTER SET! (example: latin1, utf8, ...)"
+	read charset
+	echo "Creating new WordPress database..."
+	mysql -e "CREATE DATABASE ${dbname} /*\!40100 DEFAULT CHARACTER SET ${charset} */;"
+	echo "Database successfully created!"
+	echo "Showing existing databases..."
+	mysql -e "show databases;"
+	echo ""
+	echo "Please enter the NAME of the new WordPress database user! (example: user1)"
+	read username
+	echo "Please enter the PASSWORD for the new WordPress database user!"
+	read userpass
+	echo "Creating new user..."
+	mysql -e "CREATE USER ${username}@localhost IDENTIFIED BY '${userpass}';"
+	echo "User successfully created!"
+	echo ""
+	echo "Granting ALL privileges on ${dbname} to ${username}!"
+	mysql -e "GRANT ALL PRIVILEGES ON ${dbname}.* TO '${username}'@'localhost';"
+	mysql -e "FLUSH PRIVILEGES;"
+	echo "You're good now :)"
+	exit
+
+
+# If /root/.my.cnf doesn't exist then it'll ask for root password	
+else
+	echo "Please enter root user MySQL password!"
+	read rootpasswd
+	echo "Please enter the NAME of the new WordPress database! (example: database1)"
+	read dbname
+	echo "Please enter the WordPress database CHARACTER SET! (example: latin1, utf8, ...)"
+	read charset
+	echo "Creating new WordPress database..."
+	mysql -uroot -p${rootpasswd} -e "CREATE DATABASE ${dbname} /*\!40100 DEFAULT CHARACTER SET ${charset} */;"
+	echo "Database successfully created!"
+	echo "Showing existing databases..."
+	mysql -uroot -p${rootpasswd} -e "show databases;"
+	echo ""
+	echo "Please enter the NAME of the new WordPress database user! (example: user1)"
+	read username
+	echo "Please enter the PASSWORD for the new WordPress database user!"
+	read userpass
+	echo "Creating new user..."
+	mysql -uroot -p${rootpasswd} -e "CREATE USER ${username}@localhost IDENTIFIED BY '${userpass}';"
+	echo "User successfully created!"
+	echo ""
+	echo "Granting ALL privileges on ${dbname} to ${username}!"
+	mysql -uroot -p${rootpasswd} -e "GRANT ALL PRIVILEGES ON ${dbname}.* TO '${username}'@'localhost';"
+	mysql -uroot -p${rootpasswd} -e "FLUSH PRIVILEGES;"
+	echo "You're good now :)"
+	exit
+fi
+     say_done
+}
+##############################################################################################################
+
 # Install Apache
 install_apache(){
   clear
@@ -1431,6 +1503,7 @@ secure_ssh
 set_iptables
 install_fail2ban
 install_secure_mysql
+create__mysql_user_db
 install_apache
 install_secure_php
 install_modsecurity
@@ -1527,6 +1600,7 @@ secure_ssh
 set_iptables
 install_fail2ban
 install_secure_mysql
+create__mysql_user_db
 install_nginx_modsecurity
 set_nginx_vhost
 set_nginx_modsec_OwaspRules
@@ -1615,6 +1689,7 @@ secure_ssh
 set_iptables
 install_fail2ban
 install_secure_mysql
+create__mysql_user_db
 install_apache
 install_secure_php
 install_modsecurity
@@ -1686,12 +1761,13 @@ echo "26. Enable Unnatended Upgrades"
 echo "27. Enable Process Accounting"
 echo "28. Install PHP Suhosin (Disabled for Now)"
 echo "29. Install and Secure MySQL"
-echo "30. Set More Restrictive UMASK Value (027)"
-echo "31. Secure /tmp Directory"
-echo "32. Install PSAD IDS"
-echo "33. Set GRUB Bootloader Password"
-echo "36. Add rsa key to current user mannually"
-echo "34. Exit"
+echo "30. Create MySQL user and database
+echo "31. Set More Restrictive UMASK Value (027)"
+echo "32. Secure /tmp Directory"
+echo "33. Install PSAD IDS"
+echo "34. Set GRUB Bootloader Password"
+echo "35. Add rsa key to current user mannually"
+echo "36. Exit"
 echo " "
 
 read menu
@@ -1830,22 +1906,26 @@ install_secure_mysql
 ;;
 
 30)
-restrictive_umask
+create__mysql_user_db
 ;;
 
 31)
-secure_tmp
+restrictive_umask
 ;;
 
 32)
-install_psad
+secure_tmp
 ;;
 
 33)
-set_grubpassword
+install_psad
 ;;
 
 34)
+set_grubpassword
+;;
+
+35)
 break ;;
 
 36)
