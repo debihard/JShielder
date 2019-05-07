@@ -629,6 +629,12 @@ set_owasp_rules(){
     
     cp /etc/modsecurity/modsecurity.conf{-recommended,}
     
+    sed -i -e 's/SecDefaultAction \"phase:1,log,auditlog,pass\"/#SecDefaultAction \"phase:1,log,auditlog,pass\"/g' /etc/modsecurity/crs/crs-setup.conf
+    sed -i -e 's/SecDefaultAction \"phase:2,log,auditlog,pass\"/#SecDefaultAction \"phase:2,log,auditlog,pass\"/g' /etc/modsecurity/crs/crs-setup.conf
+    sed -i -e 's/# SecDefaultAction \"phase:1,log,auditlog,deny,status:403\"/SecDefaultAction \"phase:1,log,auditlog,deny,status:403\"/g' /etc/modsecurity/crs/crs-setup.conf
+    sed -i -e 's/# SecDefaultAction \"phase:2,log,auditlog,deny,status:403\"/SecDefaultAction \"phase:2,log,auditlog,deny,status:403\"/g' /etc/modsecurity/crs/crs-setup.conf
+ 
+    
     sed -i -e 's/DetectionOnly$/On/i' /etc/modsecurity/modsecurity.conf
     sed -i -e 's/SecStatusEngine On/SecStatusEngine Off/g' /etc/modsecurity/modsecurity.conf
    
