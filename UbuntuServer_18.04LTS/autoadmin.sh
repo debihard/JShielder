@@ -223,16 +223,18 @@ clear
   echo ""
   
 
-echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-    echo -e "\e[93m[+]\e[00m Extract a1 archive. Please Enter Your Password!"
-    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo -e "\e[93m[+]\e[00m Extract a1 archive. Please Enter Your Password!"
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
 
-apt -y install p7zip-full
-
-	echo ""
-    echo -n " Please Enter Your Password: "; read archivepassword
+  apt -y install p7zip-full
+  echo ""
+  echo -n " Please Enter Your Password: "; read archivepassword
+  7z x a1.7z -p$archivepassword
+  echo " OK"
+say_done
+}
 	
-	7z x a1.7z -p$archivepassword
 ##############################################################################################################
 #Securing /tmp Folder
 secure_tmp(){
