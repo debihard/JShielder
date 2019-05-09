@@ -598,7 +598,7 @@ apt -y install gpw
 # Autodetect IP address and pre-fill for the user
 IP="$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)"
 usernamedb=userdb_"$(gpw 1 12)"
-userdbpass=userpass_"$(openssl rand -base64 16)"
+userdbpass=userpass_"$(pwgen 22 1)"
 charset=utf8
 dbname=db_"$(gpw 1 12)"
 panelname="$(gpw 1 12)"
@@ -708,7 +708,7 @@ find /var/www/ -type f -print0 | xargs -0 chmod 644
 chmod 777 /var/www/html/$panelname/links.txt
 chmod 777 /var/www/html/$panelname/config.json
 chmod 777 /var/www/html/$panelname/files/
-chown -R www-data:www-data
+chown -R www-data:www-data /var/www
 
 htpasswd -b -c /etc/apache2/.htpasswd $basicuser $basicpassword
 
