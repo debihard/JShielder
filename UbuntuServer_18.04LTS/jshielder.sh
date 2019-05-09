@@ -1478,7 +1478,8 @@ echo "4. Reverse Proxy Deployment with Nginx (ModSecurity)"
 echo "5. Running With SecureWPDeployer or JSDeployer Script"
 echo "6. Customized Run (Only run desired Options)"
 echo "7. CIS Benchmark Hardening"
-echo "8. Exit"
+echo "8. Autoadmin"
+echo "9. Exit"
 echo
 
 read choice
@@ -1723,7 +1724,7 @@ file_permissions
 6)
 
 menu=""
-until [ "$menu" = "34" ]; do
+until [ "$menu" = "36" ]; do
 
 clear
 f_banner
@@ -1926,11 +1927,11 @@ set_grubpassword
 ;;
 
 35)
-break ;;
-
-36)
 rsa_add
 ;;
+
+36)
+break ;;
 
 *) ;;
 
@@ -1944,6 +1945,11 @@ chmod +x jshielder-CIS.sh
 ;;
 
 8)
+chmod +x autoadmin.sh
+./autoadmin.sh
+;;
+
+9)
 exit 0
 ;;
 
