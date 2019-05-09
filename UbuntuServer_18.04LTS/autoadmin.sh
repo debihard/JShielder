@@ -84,9 +84,10 @@ f_banner
     echo -e "\e[93m[+]\e[00m Please Update Your Root Password!"
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
     echo ""
-    echo -n " Type the new root password: "; read root_password
-   
-    echo -e "$root_password\n$root_password" | passwd root
+    #echo -n " Type the new root password: "; read root_password
+    #echo -e "$root_password\n$root_password" | passwd root
+    echo -n " Type the new root password: "
+    passwd root
     say_done
 }
 
@@ -193,6 +194,8 @@ unused_filesystems(){
 
 ##############################################################################################################
 
+#Disable uncommon netprotocols
+
 uncommon_netprotocols(){
    clear
    f_banner
@@ -213,6 +216,28 @@ uncommon_netprotocols(){
 ##############################################################################################################
 
 
+##############################################################################################################
+extract_a1(){
+clear
+  f_banner
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo -e "\e[93m[+]\e[00m Extract a1"
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo ""
+  
+
+echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo -e "\e[93m[+]\e[00m Extract a1 archive. Please Enter Your Password!"
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+
+apt -y install p7zip-full
+
+	echo ""
+    echo -n " Please Enter Your Password: "; read archivepassword
+	
+	7z x a1.7z -p$archivepassword
+  
+##############################################################################################################
 
 
 
@@ -252,118 +277,6 @@ secure_tmp(){
   fi
 }
 
-##############################################################################################################
-
-##############################################################################################################
-
-# Install fail2ban
-    # To Remove a Fail2Ban rule use:
-    # iptables -D fail2ban-ssh -s IP -j DROP
-install_fail2ban(){
-    clear
-    f_banner
-    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-    echo -e "\e[93m[+]\e[00m Installing Fail2Ban"
-    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-    echo ""
-    apt -y install sendmail
-    apt -y install fail2ban
-    say_done
-}
-
-##############################################################################################################
-
-# Install, Configure and Optimize MySQL
-install_secure_mysql(){
-    clear
-    f_banner
-    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-    echo -e "\e[93m[+]\e[00m Installing, Configuring and Optimizing MySQL"
-    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-    echo ""
-    apt -y install mysql-server
-    echo ""
-    echo -n " configuring MySQL............ "
-    spinner
-    cp templates/mysql /etc/mysql/mysqld.cnf; echo " OK"
-    mysql_secure_installation
-    cp templates/usr.sbin.mysqld /etc/apparmor.d/local/usr.sbin.mysqld
-    service mysql restart
-    say_done
-}
-
-##############################################################################################################
-
-# Create mysql user and data base
-
-create__mysql_user_db(){
-    clear
-    f_banner
-    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-    echo -e "\e[93m[+]\e[00m Create MySQL user and database"
-    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-    echo ""
-
-#!/bin/bash
-# Bash script written by Saad Ismail - me@saadismail.net
-
-# If /root/.my.cnf exists then it won't ask for root password
-if [ -f /root/.my.cnf ]; then
-	echo "Please enter the NAME of the new WordPress database! (example: database1)"
-	read dbname
-	echo "Please enter the WordPress database CHARACTER SET! (example: latin1, utf8, ...)"
-	read charset
-	echo "Creating new WordPress database..."
-	mysql -e "CREATE DATABASE ${dbname} /*\!40100 DEFAULT CHARACTER SET ${charset} */;"
-	echo "Database successfully created!"
-	echo "Showing existing databases..."
-	mysql -e "show databases;"
-	echo ""
-	echo "Please enter the NAME of the new WordPress database user! (example: user1)"
-	read username
-	echo "Please enter the PASSWORD for the new WordPress database user!"
-	read userpass
-	echo "Creating new user..."
-	mysql -e "CREATE USER ${username}@localhost IDENTIFIED BY '${userpass}';"
-	echo "User successfully created!"
-	echo ""
-	echo "Granting ALL privileges on ${dbname} to ${username}!"
-	mysql -e "GRANT ALL PRIVILEGES ON ${dbname}.* TO '${username}'@'localhost';"
-	mysql -e "FLUSH PRIVILEGES;"
-	echo "You're good now :)"
-	exit
-
-
-# If /root/.my.cnf doesn't exist then it'll ask for root password	
-else
-	echo "Please enter root user MySQL password!"
-	read rootpasswd
-	echo "Please enter the NAME of the new WordPress database! (example: database1)"
-	read dbname
-	echo "Please enter the WordPress database CHARACTER SET! (example: latin1, utf8, ...)"
-	read charset
-	echo "Creating new WordPress database..."
-	mysql -uroot -p${rootpasswd} -e "CREATE DATABASE ${dbname} /*\!40100 DEFAULT CHARACTER SET ${charset} */;"
-	echo "Database successfully created!"
-	echo "Showing existing databases..."
-	mysql -uroot -p${rootpasswd} -e "show databases;"
-	echo ""
-	echo "Please enter the NAME of the new WordPress database user! (example: user1)"
-	read username
-	echo "Please enter the PASSWORD for the new WordPress database user!"
-	read userpass
-	echo "Creating new user..."
-	mysql -uroot -p${rootpasswd} -e "CREATE USER ${username}@localhost IDENTIFIED BY '${userpass}';"
-	echo "User successfully created!"
-	echo ""
-	echo "Granting ALL privileges on ${dbname} to ${username}!"
-	mysql -uroot -p${rootpasswd} -e "GRANT ALL PRIVILEGES ON ${dbname}.* TO '${username}'@'localhost';"
-	mysql -uroot -p${rootpasswd} -e "FLUSH PRIVILEGES;"
-	echo "You're good now :)"
-	exit
-fi
-     say_done
-}
 ##############################################################################################################
 
 # Install Apache
@@ -419,29 +332,145 @@ secure_optimize_apache(){
 
 ##############################################################################################################
 
-##############################################################################################################
-extract_az(){
-clear
-  f_banner
-  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-  echo -e "\e[93m[+]\e[00m Downloading and extract az admin"
-  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-  echo ""
-  
-  #!/bin/bash
-
-echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-    echo -e "\e[93m[+]\e[00m Extract az archive. Please Enter Your Password!"
+# Install fail2ban
+    # To Remove a Fail2Ban rule use:
+    # iptables -D fail2ban-ssh -s IP -j DROP
+install_fail2ban(){
+    clear
+    f_banner
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo -e "\e[93m[+]\e[00m Installing Fail2Ban"
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo ""
+    apt -y install sendmail
+    apt -y install fail2ban
+    say_done
+}
 
-apt -y install p7zip-full
-
-	echo ""
-    echo -n " Please Enter Your Password: "; read archivepassword
-	
-	7z x az.7z -p$archivepassword
-  cp -aR /root/az/. /var/www/html/
 ##############################################################################################################
+
+# Install, Configure and Optimize MySQL
+install_secure_mysql(){
+    clear
+    f_banner
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo -e "\e[93m[+]\e[00m Installing, Configuring and Optimizing MySQL"
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo ""
+    apt -y install mysql-server
+    echo ""
+    echo -n " configuring MySQL............ "
+    spinner
+    cp templates/mysql /etc/mysql/mysqld.cnf; echo " OK"
+    mysql_secure_installation
+    cp templates/usr.sbin.mysqld /etc/apparmor.d/local/usr.sbin.mysqld
+    service mysql restart
+    say_done
+}
+
+##############################################################################################################
+
+# Create mysql user and data base and copy
+
+create__mysql_user_db_a1(){
+    clear
+    f_banner
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo -e "\e[93m[+]\e[00m Create MySQL user and database"
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo ""
+
+apt -y install pwgen
+apt -y install gpw
+
+usernamedb=userdb_$(gpw 12 1)
+userdbpass=userpass_$(openssl rand -base64 16)
+charset=utf8
+dbname=db_$(gpw 12 1)
+panelname=$(gpw 12 1)
+
+adminpassw=admin_pass_$(openssl rand -base64 16)
+basicuser=$(gpw 8 1)
+basicpassword=$basicuser_$(openssl rand -base64 16)
+
+htpasswd -c /etc/apache2/.htpasswd "$basicuser" "$basicpassword"
+
+
+# Bash script written by Saad Ismail - me@saadismail.net
+
+# If /root/.my.cnf exists then it won't ask for root password
+if [ -f /root/.my.cnf ]; then
+	
+	echo "Creating new adminpanel database..."
+	mysql -e "CREATE DATABASE ${dbname} /*\!40100 DEFAULT CHARACTER SET ${charset} */;"
+	echo "Database successfully created!"
+	echo "Showing existing databases..."
+	mysql -e "show databases;"
+	echo ""
+	
+	echo "Creating new user..."
+	mysql -e "CREATE USER ${usernamedb}@localhost IDENTIFIED BY '${userdbpass}';"
+	echo "User successfully created!"
+	echo ""
+	echo "Granting ALL privileges on ${dbname} to ${usernamedb}!"
+	mysql -e "GRANT ALL PRIVILEGES ON ${dbname}.* TO '${usernamedb}'@'localhost';"
+	mysql -e "FLUSH PRIVILEGES;"
+	echo "You're good now :)"
+	echo ""
+	
+	echo "Importing mysql dump..."
+	
+	mysql -u "$usernamedb" -p "$userdbpass" "$dbname" < /root/a1/panel/info/dump.sql
+	
+	exit
+
+
+# If /root/.my.cnf doesn't exist then it'll ask for root password	
+else
+	echo "Please enter root user MySQL password!"
+	read rootpasswd
+	echo "Creating new adminpanel database..."
+	mysql -e "CREATE DATABASE ${dbname} /*\!40100 DEFAULT CHARACTER SET ${charset} */;"
+	echo "Database successfully created!"
+	echo "Showing existing databases..."
+	mysql -e "show databases;"
+	echo ""
+	
+	echo "Creating new user..."
+	mysql -e "CREATE USER ${usernamedb}@localhost IDENTIFIED BY '${userdbpass}';"
+	echo "User successfully created!"
+	echo ""
+	echo "Granting ALL privileges on ${dbname} to ${usernamedb}!"
+	mysql -e "GRANT ALL PRIVILEGES ON ${dbname}.* TO '${usernamedb}'@'localhost';"
+	mysql -e "FLUSH PRIVILEGES;"
+	echo "You're good now :)"
+	echo ""
+	
+	echo "Importing mysql dump..."
+	
+	mysql -u "$usernamedb" -p "$userdbpass" "$dbname" < /root/a1/panel/info/dump.sql
+	exit
+fi
+       
+        echo "Setup adminpanel..."
+        
+	sed -i -e "s/panelreplace/$panelname/g" /root/a1/index.php
+	sed -i -e "s/dbuserreplace/$usernamedb/g" /root/a1/index.php
+	sed -i -e "s/dbpassreplace/$userdbpass/g" /root/a1/index.php
+        sed -i -e "s/dbnamereplace/$dbname/g" /root/a1/index.php
+	sed -i -e "s/adminpaswreplace/$adminpassw/g" /root/a1/index.php
+	rm /root/a1/panel/info/dump.sql
+	mv /root/a1/panel /root/a1/$panelname
+	
+
+
+        cp -aR /root/a1/. /var/www/html/
+
+
+     say_done
+}
+##############################################################################################################
+
 
 # Tune and Secure Kernel
 tune_secure_kernel(){
@@ -662,7 +691,7 @@ echo -e "\e[34m-----------------------------------------------------------------
 echo -e "\e[93m[+]\e[00m SELECT THE DESIRED OPTION"
 echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
 echo ""
-echo "1. Az"
+echo "1. A1"
 echo "2. "
 echo "3. "
 echo "4. "
@@ -686,19 +715,18 @@ update_system
 restrictive_umask
 unused_filesystems
 uncommon_netprotocols
-admin_user
-install_fail2ban
-install_secure_mysql
-create__mysql_user_db
+extract_a1
+secure_tmp
 install_apache
 install_secure_php
 secure_optimize_apache
-additional_packages
+install_fail2ban
+install_secure_mysql
+create__mysql_user_db_a1
 tune_secure_kernel
 tune_nano_vim_bashrc
 daily_update_cronjob
 additional_hardening
-secure_tmp
 apache_conf_restrictions
 unattended_upgrades
 file_permissions
