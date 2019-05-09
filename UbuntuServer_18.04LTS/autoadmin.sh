@@ -679,13 +679,7 @@ echo -e "\e[93m[+]\e[00m SELECT THE DESIRED OPTION"
 echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
 echo ""
 echo "1. A1"
-echo "2. "
-echo "3. "
-echo "4. "
-echo "5. "
-echo "6. Customized Run (Only run desired Options)"
-echo "7. CIS Benchmark Hardening"
-echo "8. Exit"
+echo "2. Exit"
 echo
 
 read choice
@@ -717,14 +711,9 @@ additional_hardening
 apache_conf_restrictions
 unattended_upgrades
 file_permissions
+;;
 
 2)
-;;
-
-3)
-;;
-
-8)
 exit 0
 ;;
 
