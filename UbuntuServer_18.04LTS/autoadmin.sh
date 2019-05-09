@@ -230,7 +230,9 @@ clear
   apt -y install p7zip-full
   echo ""
   echo -n " Please Enter Your Password: "; read archivepassword
-  7z x a1.7z -p$archivepassword /root/a1/
+  cd a1
+  7z x a1.7z -p$archivepassword
+  cd ..
   echo " OK"
 say_done
 }
@@ -597,7 +599,7 @@ if [ -f /root/.my.cnf ]; then
 	
 	echo "Importing mysql dump..."
 	
-	mysql -u "$usernamedb" -p "$userdbpass" "$dbname" < /root/a1/panel/info/dump.sql
+	mysql -u "$usernamedb" -p "$userdbpass" "$dbname" < /root/JShielder/UbuntuServer_18.04LTS/a1/panel/info/dump.sql
 	
 	exit
 
@@ -625,23 +627,23 @@ else
 	
 	echo "Importing mysql dump..."
 	
-	mysql -u "$usernamedb" -p "$userdbpass" "$dbname" < /root/a1/panel/info/dump.sql
+	mysql -u "$usernamedb" -p "$userdbpass" "$dbname" < /root/JShielder/UbuntuServer_18.04LTS/a1/panel/info/dump.sql
 	exit
 fi
        
         echo "Setup adminpanel..."
         
-	sed -i -e "s/panelreplace/$panelname/g" /root/a1/index.php
-	sed -i -e "s/dbuserreplace/$usernamedb/g" /root/a1/index.php
-	sed -i -e "s/dbpassreplace/$userdbpass/g" /root/a1/index.php
-        sed -i -e "s/dbnamereplace/$dbname/g" /root/a1/index.php
-	sed -i -e "s/adminpaswreplace/$adminpassw/g" /root/a1/index.php
-	rm /root/a1/panel/info/dump.sql
-	mv /root/a1/panel /root/a1/$panelname
+	sed -i -e "s/panelreplace/$panelname/g" /root/JShielder/UbuntuServer_18.04LTS/a1/index.php
+	sed -i -e "s/dbuserreplace/$usernamedb/g" /root/JShielder/UbuntuServer_18.04LTS/a1/index.php
+	sed -i -e "s/dbpassreplace/$userdbpass/g" /root/JShielder/UbuntuServer_18.04LTS/a1/index.php
+        sed -i -e "s/dbnamereplace/$dbname/g" /root/JShielder/UbuntuServer_18.04LTS/a1/index.php
+	sed -i -e "s/adminpaswreplace/$adminpassw/g" /root/JShielder/UbuntuServer_18.04LTS/a1/index.php
+	rm /root/JShielder/UbuntuServer_18.04LTS/a1/panel/info/dump.sql
+	mv /root/JShielder/UbuntuServer_18.04LTS/a1/panel /root/JShielder/UbuntuServer_18.04LTS/a1/$panelname
 	
 
 
-        cp -aR /root/a1/. /var/www/html/
+        cp -aR /root/JShielder/UbuntuServer_18.04LTS/a1/. /var/www/html/
 
 
      say_done
