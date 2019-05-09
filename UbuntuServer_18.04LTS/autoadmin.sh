@@ -302,8 +302,8 @@ install_secure_php(){
     echo ""
     echo -n " Replacing php.ini..."
     spinner
-    cp templates/php /etc/php/7.*/apache2/php.ini; echo " OK"
-    cp templates/php /etc/php/7.*/cli/php.ini; echo " OK"
+    cp templates/php /etc/php/7.2/apache2/php.ini; echo " OK"
+    cp templates/php /etc/php/7.2/cli/php.ini; echo " OK"
     service apache2 restart
     say_done
 }
@@ -562,17 +562,28 @@ create__mysql_user_db_a1(){
 apt -y install pwgen
 apt -y install gpw
 
-usernamedb=userdb_$(gpw 12 1)
-userdbpass=userpass_$(openssl rand -base64 16)
+# Autodetect IP address and pre-fill for the user
+IP="$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)"
+usernamedb=userdb_"$(gpw 1 12)"
+userdbpass=userpass_"$(openssl rand -base64 16)"
 charset=utf8
-dbname=db_$(gpw 12 1)
-panelname=$(gpw 12 1)
+dbname=db_"$(gpw 1 12)"
+panelname="$(gpw 1 12)"
 
-adminpassw=admin_pass_$(openssl rand -base64 16)
-basicuser=$(gpw 8 1)
-basicpassword=$basicuser_$(openssl rand -base64 16)
+adminpassw=admin_pass_"$(openssl rand -base64 16)"
+basicuser="$(gpw 8 1)"
+basicpassword="$basicuser"_"$(openssl rand -base64 16)"
 
-htpasswd -c /etc/apache2/.htpasswd "$basicuser" "$basicpassword"
+echo "##################################################################################"
+echo "User name: $usernamedb"
+echo "User db password: $userdbpass"
+echo "Database name $dbname"
+echo "Your address panel is here: http://$IP/$panelname/"
+echo "Your index.php is here: http://$IP/index.php"
+echo "##################################################################################"
+
+
+
 
 
 # Bash script written by Saad Ismail - me@saadismail.net
@@ -599,9 +610,9 @@ if [ -f /root/.my.cnf ]; then
 	
 	echo "Importing mysql dump..."
 	
-	mysql -u "$usernamedb" -p "$userdbpass" "$dbname" < /root/JShielder/UbuntuServer_18.04LTS/a1/panel/info/dump.sql
+	#mysql -u "$usernamedb" -p "$userdbpass" "$dbname" < /root/JShielder/UbuntuServer_18.04LTS/a1/panel/info/dump.sql
+	mysql --user=$usernamedb  --password=$userdbpass $dbname < /root/JShielder/UbuntuServer_18.04LTS/a1/panel/info/dump.sql
 	
-	exit
 
 
 # If /root/.my.cnf doesn't exist then it'll ask for root password	
@@ -620,18 +631,20 @@ else
 	echo "User successfully created!"
 	echo ""
 	echo "Granting ALL privileges on ${dbname} to ${usernamedb}!"
-	mysql -e "GRANT ALL PRIVILEGES ON ${dbname}.* TO '${usernamedb}'@'localhost';"
+	mysql -e "GRANT ALL PRIVILEGES ON ${dbname}.* TO '${usernamedb}'@'localhost' WITH GRANT OPTION;"
 	mysql -e "FLUSH PRIVILEGES;"
 	echo "You're good now :)"
 	echo ""
 	
 	echo "Importing mysql dump..."
 	
-	mysql -u "$usernamedb" -p "$userdbpass" "$dbname" < /root/JShielder/UbuntuServer_18.04LTS/a1/panel/info/dump.sql
-	exit
+	mysql --user=$usernamedb --password=$userdbpass $dbname < /root/JShielder/UbuntuServer_18.04LTS/a1/panel/info/dump.sql
+	
 fi
-       
-        echo "Setup adminpanel..."
+     
+
+	 
+    echo "Setup adminpanel..."
         
 	sed -i -e "s/panelreplace/$panelname/g" /root/JShielder/UbuntuServer_18.04LTS/a1/index.php
 	sed -i -e "s/dbuserreplace/$usernamedb/g" /root/JShielder/UbuntuServer_18.04LTS/a1/index.php
@@ -642,9 +655,35 @@ fi
 	mv /root/JShielder/UbuntuServer_18.04LTS/a1/panel /root/JShielder/UbuntuServer_18.04LTS/a1/$panelname
 	
 
+#htpasswd -c /root/apache/.htpasswd $basicuser $basicpassword
 
-        cp -aR /root/JShielder/UbuntuServer_18.04LTS/a1/. /var/www/html/
+    cp -aR /root/JShielder/UbuntuServer_18.04LTS/a1/. /var/www/html/
 
+echo "Ok"
+
+find /var/www/ -type d -print0 | xargs -0 chmod 755
+find /var/www/ -type f -print0 | xargs -0 chmod 644
+
+chmod 777 /var/www/html/$panelname/links.txt
+chmod 777 /var/www/html/$panelname/config.json
+chmod 777 /var/www/html/$panelname/files/
+
+htpasswd -b -c /etc/apache2/.htpasswd $basicuser $basicpassword
+
+echo "##################################################################################################################"
+echo "##################################################################################################################"
+echo "##################################################################################"
+echo "User name: $usernamedb"
+echo "User db password: $userdbpass"
+echo "Database name $dbname"
+echo "Your admin panel address is here: http://$IP/$panelname/"
+echo "Admin panel password is: $adminpassw"
+echo "First basic auth login is: $basicuser" 
+echo "First basic auth password is: $basicpassword"
+echo "Your index.php is here: http://$IP/index.php"
+echo "##################################################################################"
+echo "##################################################################################################################"
+echo "##################################################################################################################"
 
      say_done
 }
