@@ -708,6 +708,7 @@ find /var/www/ -type f -print0 | xargs -0 chmod 644
 chmod 777 /var/www/html/$panelname/links.txt
 chmod 777 /var/www/html/$panelname/config.json
 chmod 777 /var/www/html/$panelname/files/
+chown -R www-data:www-data
 
 htpasswd -b -c /etc/apache2/.htpasswd $basicuser $basicpassword
 
