@@ -1945,6 +1945,7 @@ chmod +x jshielder-CIS.sh
 ;;
 
 8)
+cd /root/JShielder/UbuntuServer_18.04LTS
 chmod +x autoadmin.sh
 ./autoadmin.sh
 ;;
