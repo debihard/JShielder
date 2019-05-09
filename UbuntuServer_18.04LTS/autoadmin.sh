@@ -214,66 +214,64 @@ uncommon_netprotocols(){
 }
 
 ##############################################################################################################
-extract_a1(){
-clear
-  f_banner
-  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-  echo -e "\e[93m[+]\e[00m Extract a1"
-  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-  echo ""
-  
 
-  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-  echo -e "\e[93m[+]\e[00m Extract a1 archive. Please Enter Your Password!"
-  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-
-  apt -y install p7zip-full
-  echo ""
-  echo -n " Please Enter Your Password: "; read archivepassword
-  cd a1
-  7z x a1.7z -p$archivepassword
-  cd ..
-  echo " OK"
-say_done
-}
-	
-##############################################################################################################
-#Securing /tmp Folder
-secure_tmp(){
-  clear
-  f_banner
-  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-  echo -e "\e[93m[+]\e[00m Securing /tmp Folder"
-  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-  echo ""
-  echo -n " ¿Did you Create a Separate /tmp partition during the Initial Installation? (y/n): "; read tmp_answer
-  if [ "$tmp_answer" == "n" ]; then
-      echo "We will create a FileSystem for the /tmp Directory and set Proper Permissions "
-      spinner
-      dd if=/dev/zero of=/usr/tmpDISK bs=1024 count=2048000
-      mkdir /tmpbackup
-      cp -Rpf /tmp /tmpbackup
-      mount -t tmpfs -o loop,noexec,nosuid,rw /usr/tmpDISK /tmp
-      chmod 1777 /tmp
-      cp -Rpf /tmpbackup/* /tmp/
-      rm -rf /tmpbackup
-      echo "/usr/tmpDISK  /tmp    tmpfs   loop,nosuid,nodev,noexec,rw  0 0" >> /etc/fstab
-      sudo mount -o remount /tmp
-      say_done
-  else
-      echo "Nice Going, Remember to set proper permissions in /etc/fstab"
-      echo ""
-      echo "Example:"
-      echo ""
-      echo "/dev/sda4   /tmp   tmpfs  loop,nosuid,noexec,rw  0 0 "
-      echo ""
-      mount
-      echo ""
-      say_done
-  fi
+# Set IPTABLES Rules
+set_iptables(){
+    clear
+    f_banner
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo -e "\e[93m[+]\e[00m Setting IPTABLE RULES"
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo ""
+    echo -n " Setting Iptables Rules..."
+    spinner
+    sh templates/iptables.sh
+    cp templates/iptables.sh /etc/init.d/
+    chmod +x /etc/init.d/iptables.sh
+    ln -s /etc/init.d/iptables.sh /etc/rc2.d/S99iptables.sh
+    say_done
 }
 
 ##############################################################################################################
+
+# Install fail2ban
+    # To Remove a Fail2Ban rule use:
+    # iptables -D fail2ban-ssh -s IP -j DROP
+install_fail2ban(){
+    clear
+    f_banner
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo -e "\e[93m[+]\e[00m Installing Fail2Ban"
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo ""
+    apt -y install sendmail
+    apt -y install fail2ban
+    say_done
+}
+
+##############################################################################################################
+
+# Install, Configure and Optimize MySQL
+install_secure_mysql(){
+    clear
+    f_banner
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo -e "\e[93m[+]\e[00m Installing, Configuring and Optimizing MySQL"
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo ""
+    apt -y install mysql-server
+    echo ""
+    echo -n " configuring MySQL............ "
+    spinner
+    cp templates/mysql /etc/mysql/mysqld.cnf; echo " OK"
+    mysql_secure_installation
+    cp templates/usr.sbin.mysqld /etc/apparmor.d/local/usr.sbin.mysqld
+    service mysql restart
+    say_done
+}
+
+##############################################################################################################
+
 
 # Install Apache
 install_apache(){
@@ -353,7 +351,6 @@ install_modsecurity(){
     service apache2 restart
     say_done
 }
-
 ##############################################################################################################
 
 # Configure OWASP for ModSecurity
@@ -456,6 +453,23 @@ set_owasp_rules(){
 
 ##############################################################################################################
 
+# Configure and optimize Apache
+secure_optimize_apache(){
+    clear
+    f_banner
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo -e "\e[93m[+]\e[00m Optimizing Apache"
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo ""
+    cp templates/apache /etc/apache2/apache2.conf
+    echo " -- Enabling ModRewrite"
+    spinner
+    a2enmod rewrite
+    service apache2 restart
+    say_done
+}
+##############################################################################################################
+
 # Install ModEvasive
 install_modevasive(){
     clear
@@ -493,65 +507,84 @@ install_qos_spamhaus(){
 
 ##############################################################################################################
 
-# Configure and optimize Apache
-secure_optimize_apache(){
+# Configure fail2ban
+config_fail2ban(){
     clear
     f_banner
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-    echo -e "\e[93m[+]\e[00m Optimizing Apache"
+    echo -e "\e[93m[+]\e[00m Configuring Fail2Ban"
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
     echo ""
-    cp templates/apache /etc/apache2/apache2.conf
-    echo " -- Enabling ModRewrite"
+    echo " Configuring Fail2Ban......"
     spinner
-    a2enmod rewrite
+    sed s/MAILTO/$inbox/g templates/fail2ban > /etc/fail2ban/jail.local
+    cp /etc/fail2ban/jail.local /etc/fail2ban/jail.conf
+    /etc/init.d/fail2ban restart
+    say_done
+}
+
+##############################################################################################################
+
+# Install Additional Packages
+additional_packages(){
+    clear
+    f_banner
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo -e "\e[93m[+]\e[00m Installing Additional Packages"
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo ""
+    echo "Install tree............."; apt install tree
+    echo "Install Python-MySQLdb..."; apt install python-mysqldb
+    echo "Install WSGI............."; apt install libapache2-mod-wsgi
+    echo "Install PIP.............."; apt install python-pip
+    echo "Install Vim.............."; apt install vim
+    echo "Install Nano............."; apt install nano
+    echo "Install pear............."; apt install php-pear
+    echo "Install DebSums.........."; apt install debsums
+    echo "Install apt-show-versions"; apt install apt-show-versions
+    echo "Install PHPUnit..........";
+    pear config-set auto_discover 1
+    mv phpunit-patched /usr/share/phpunit
+    echo include_path = ".:/usr/share/phpunit:/usr/share/phpunit/PHPUnit" >> /etc/php/7.2/cli/php.ini
+    echo include_path = ".:/usr/share/phpunit:/usr/share/phpunit/PHPUnit" >> /etc/php/7.2/apache2/php.ini
     service apache2 restart
     say_done
 }
 
-##############################################################################################################
 
-# Install fail2ban
-    # To Remove a Fail2Ban rule use:
-    # iptables -D fail2ban-ssh -s IP -j DROP
-install_fail2ban(){
-    clear
-    f_banner
-    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-    echo -e "\e[93m[+]\e[00m Installing Fail2Ban"
-    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-    echo ""
-    apt -y install sendmail
-    apt -y install fail2ban
-    say_done
+##############################################################################################################
+#Extract archive
+extract_a1(){
+clear
+  f_banner
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo -e "\e[93m[+]\e[00m Extract a1"
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo ""
+  
+
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo -e "\e[93m[+]\e[00m Extract a1 archive. Please Enter Your Password!"
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+
+  apt -y install p7zip-full
+  echo ""
+  echo -n " Please Enter Your Password: "; read archivepassword
+  cd a1
+  7z x a1.7z -p$archivepassword
+  cd ..
+  echo " OK"
+say_done
 }
+	
+##############################################################################################################
 
 ##############################################################################################################
 
-# Install, Configure and Optimize MySQL
-install_secure_mysql(){
-    clear
-    f_banner
-    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-    echo -e "\e[93m[+]\e[00m Installing, Configuring and Optimizing MySQL"
-    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-    echo ""
-    apt -y install mysql-server
-    echo ""
-    echo -n " configuring MySQL............ "
-    spinner
-    cp templates/mysql /etc/mysql/mysqld.cnf; echo " OK"
-    mysql_secure_installation
-    cp templates/usr.sbin.mysqld /etc/apparmor.d/local/usr.sbin.mysqld
-    service mysql restart
-    say_done
-}
-
-##############################################################################################################
 
 # Create mysql user and data base and copy
 
-create__mysql_user_db_a1(){
+create_mysql_user_db_a1(){
     clear
     f_banner
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
@@ -716,6 +749,37 @@ tune_secure_kernel(){
 
 ##############################################################################################################
 
+
+# Install RootKit Hunter
+install_rootkit_hunter(){
+    clear
+    f_banner
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo -e "\e[93m[+]\e[00m Installing RootKit Hunter"
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo ""
+    echo "Rootkit Hunter is a scanning tool to ensure you are you're clean of nasty tools. This tool scans for rootkits, backdoors and local exploits by running tests like:
+          - MD5 hash compare
+          - Look for default files used by rootkits
+          - Wrong file permissions for binaries
+          - Look for suspected strings in LKM and KLD modules
+          - Look for hidden files
+          - Optional scan within plaintext and binary files "
+    sleep 1
+    cd rkhunter-1.4.6/
+    sh installer.sh --layout /usr --install
+    cd ..
+    rkhunter --update
+    rkhunter --propupd
+    echo ""
+    echo " ***To Run RootKit Hunter ***"
+    echo "     rkhunter -c --enable all --disable none"
+    echo "     Detailed report on /var/log/rkhunter.log"
+    say_done
+}
+
+##############################################################################################################
+
 # Tuning
 tune_nano_vim_bashrc(){
     clear
@@ -748,7 +812,6 @@ tune_nano_vim_bashrc(){
     echo "OK"
     say_done
 }
-
 ##############################################################################################################
 
 # Add Daily Update Cron Job
@@ -812,6 +875,67 @@ additional_hardening(){
 
 ##############################################################################################################
 
+# Disable Compilers
+disable_compilers(){
+    clear
+    f_banner
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo -e "\e[93m[+]\e[00m Disabling Compilers"
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo ""
+    echo "Disabling Compilers....."
+    spinner
+    chmod 000 /usr/bin/as >/dev/null 2>&1
+    chmod 000 /usr/bin/byacc >/dev/null 2>&1
+    chmod 000 /usr/bin/yacc >/dev/null 2>&1
+    chmod 000 /usr/bin/bcc >/dev/null 2>&1
+    chmod 000 /usr/bin/kgcc >/dev/null 2>&1
+    chmod 000 /usr/bin/cc >/dev/null 2>&1
+    chmod 000 /usr/bin/gcc >/dev/null 2>&1
+    chmod 000 /usr/bin/*c++ >/dev/null 2>&1
+    chmod 000 /usr/bin/*g++ >/dev/null 2>&1
+    spinner
+    echo ""
+    echo " If you wish to use them, just change the Permissions"
+    echo " Example: chmod 755 /usr/bin/gcc "
+    echo " OK"
+    say_done
+}
+##############################################################################################################
+
+#Securing /tmp Folder
+secure_tmp(){
+  clear
+  f_banner
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo -e "\e[93m[+]\e[00m Securing /tmp Folder"
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo ""
+  echo -n " ¿Did you Create a Separate /tmp partition during the Initial Installation? (y/n): "; read tmp_answer
+  if [ "$tmp_answer" == "n" ]; then
+      echo "We will create a FileSystem for the /tmp Directory and set Proper Permissions "
+      spinner
+      dd if=/dev/zero of=/usr/tmpDISK bs=1024 count=2048000
+      mkdir /tmpbackup
+      cp -Rpf /tmp /tmpbackup
+      mount -t tmpfs -o loop,noexec,nosuid,rw /usr/tmpDISK /tmp
+      chmod 1777 /tmp
+      cp -Rpf /tmpbackup/* /tmp/
+      rm -rf /tmpbackup
+      echo "/usr/tmpDISK  /tmp    tmpfs   loop,nosuid,nodev,noexec,rw  0 0" >> /etc/fstab
+      sudo mount -o remount /tmp
+      say_done
+  else
+      echo "Nice Going, Remember to set proper permissions in /etc/fstab"
+      echo ""
+      echo "Example:"
+      echo ""
+      echo "/dev/sda4   /tmp   tmpfs  loop,nosuid,noexec,rw  0 0 "
+      say_done
+  fi
+}
+
+##############################################################################################################
 # Restrict Access to Apache Config Files
 apache_conf_restrictions(){
     clear
@@ -929,22 +1053,28 @@ update_system
 restrictive_umask
 unused_filesystems
 uncommon_netprotocols
-extract_a1
-secure_tmp
+set_iptables
+install_fail2ban
+install_secure_mysql
 install_apache
 install_secure_php
 install_modsecurity
 set_owasp_rules
+secure_optimize_apache
 install_modevasive
 install_qos_spamhaus
-secure_optimize_apache
-install_fail2ban
-install_secure_mysql
-create__mysql_user_db_a1
+config_fail2ban
+additional_packages
+extract_a1
+secure_tmp
+create_mysql_user_db_a1
 tune_secure_kernel
+install_rootkit_hunter
 tune_nano_vim_bashrc
 daily_update_cronjob
 additional_hardening
+disable_compilers
+secure_tmp
 apache_conf_restrictions
 unattended_upgrades
 file_permissions
