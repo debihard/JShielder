@@ -2,6 +2,8 @@
 
 **JShielder Automated Hardening Script for Linux Servers**
 
+git clone https://github.com/debihard/JShielder.git && cd JShielder && ./jshielder.sh
+
 JSHielder is an Open Source Bash Script developed to help SysAdmin and developers secure there Linux Servers in which they will be deploying any web application or services. This tool automates the process of installing all the necessary packages to host a web application and Hardening a Linux server with little interaction from the user. Newly added script follows CIS Benchmark Guidance to establish a Secure configuration posture for Linux systems.
 
 This tool is a Bash Script that hardens the Linux Server security automatically and the steps followed are:
