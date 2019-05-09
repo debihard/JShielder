@@ -1762,7 +1762,7 @@ echo "26. Enable Unnatended Upgrades"
 echo "27. Enable Process Accounting"
 echo "28. Install PHP Suhosin (Disabled for Now)"
 echo "29. Install and Secure MySQL"
-echo "30. Create MySQL user and database"
+echo "30. Create MySQL user and database
 echo "31. Set More Restrictive UMASK Value (027)"
 echo "32. Secure /tmp Directory"
 echo "33. Install PSAD IDS"
@@ -1927,11 +1927,11 @@ set_grubpassword
 ;;
 
 35)
-rsa_add
-;;
+break ;;
 
 36)
-break ;;
+rsa_add
+;;
 
 *) ;;
 
