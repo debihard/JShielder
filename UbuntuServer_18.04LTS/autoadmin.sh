@@ -574,13 +574,20 @@ adminpassw=admin_pass_"$(openssl rand -base64 16)"
 basicuser="$(gpw 8 1)"
 basicpassword="$basicuser"_"$(openssl rand -base64 16)"
 
+echo "##################################################################################################################"
+echo "##################################################################################################################"
 echo "##################################################################################"
 echo "User name: $usernamedb"
 echo "User db password: $userdbpass"
 echo "Database name $dbname"
-echo "Your address panel is here: http://$IP/$panelname/"
+echo "Your admin panel address is here: http://$IP/$panelname/"
+echo "Admin panel password is: $adminpassw"
+echo "First basic auth login is: $basicuser" 
+echo "First basic auth password is: $basicpassword"
 echo "Your index.php is here: http://$IP/index.php"
 echo "##################################################################################"
+echo "##################################################################################################################"
+echo "##################################################################################################################"
 
 
 
