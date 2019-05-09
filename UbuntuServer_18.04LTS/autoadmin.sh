@@ -230,7 +230,7 @@ clear
   apt -y install p7zip-full
   echo ""
   echo -n " Please Enter Your Password: "; read archivepassword
-  7z x a1.7z -p$archivepassword
+  7z x a1.7z -p$archivepassword /root/a1/
   echo " OK"
 say_done
 }
