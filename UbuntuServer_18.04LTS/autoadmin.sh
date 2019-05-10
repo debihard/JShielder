@@ -277,7 +277,7 @@ echo "$publickey" >> /home/$username/.ssh/authorized_keys
  say_done
  fi
  }
-    
+   
 ##############################################################################################################
 
 # Secure SSH
@@ -664,9 +664,6 @@ say_done
 	
 ##############################################################################################################
 
-##############################################################################################################
-
-
 # Create mysql user and data base and copy
 
 create_mysql_user_db_a1(){
@@ -688,9 +685,10 @@ charset=utf8
 dbname=db_"$(gpw 1 12)"
 panelname="$(gpw 1 12)"
 
-adminpassw=admin_pass_"$(openssl rand -base64 16)"
+adminpassw=admin_pass_"$(pwgen 22 1)"
 basicuser="$(gpw 1 8)"
-basicpassword="$basicuser"_"$(openssl rand -base64 16)"
+basicpassword="$basicuser"_"$(pwgen 18 1)"
+
 
 echo "##################################################################################################################"
 echo "##################################################################################################################"
@@ -706,9 +704,6 @@ echo "Your index.php is here: http://$IP/index.php"
 echo "##################################################################################"
 echo "##################################################################################################################"
 echo "##################################################################################################################"
-
-
-
 
 
 # Bash script written by Saad Ismail - me@saadismail.net
@@ -797,20 +792,27 @@ chown -R www-data:www-data /var/www
 
 htpasswd -b -c /etc/apache2/.htpasswd $basicuser $basicpassword
 
-echo "##################################################################################################################"
-echo "##################################################################################################################"
-echo "##################################################################################"
-echo "User name: $usernamedb"
-echo "User db password: $userdbpass"
-echo "Database name: $dbname"
-echo "Your admin panel address is here: http://$IP/$panelname/"
-echo "Admin panel password is: $adminpassw"
-echo "First basic auth login is: $basicuser" 
-echo "First basic auth password is: $basicpassword"
-echo "Your index.php is here: http://$IP/index.php"
-echo "##################################################################################"
-echo "##################################################################################################################"
-echo "##################################################################################################################"
+cat > /root/myconfig.conf << EOL
+##################################################################################################################
+##################################################################################################################
+##################################################################################################################
+
+Your admin panel address is here: http://$IP/$panelname/
+
+Basic auth login is: $basicuser
+Basic auth password is: $basicpassword
+Admin panel password is: $adminpassw
+
+User name: $usernamedb
+User db password: $userdbpass
+Database name: $dbname
+
+Your index.php is here: http://$IP/index.php
+##################################################################################################################
+##################################################################################################################
+##################################################################################################################
+EOL
+
 
      say_done
 }
@@ -936,7 +938,7 @@ additional_hardening(){
     chmod 700 /root
     chmod 600 /boot/grub/grub.cfg
     #Remove AT and Restrict Cron
-    apt purge at
+    apt -y purge at
     apt -y install libpam-cracklib
     echo ""
     echo " Securing Cron "
@@ -1165,7 +1167,7 @@ uncommon_netprotocols
 admin_user
 rsa_keygen
 rsa_keycopy
-rsa_add
+yes y | rsa_add
 secure_ssh
 set_iptables
 install_fail2ban
@@ -1185,11 +1187,11 @@ tune_secure_kernel
 install_rootkit_hunter
 tune_nano_vim_bashrc
 daily_update_cronjob
-additional_hardening
+yes y | additional_hardening
 disable_compilers
-secure_tmp
+say n | secure_tmp
 apache_conf_restrictions
-unattended_upgrades
+say y | unattended_upgrades
 file_permissions
 reboot
 ;;
