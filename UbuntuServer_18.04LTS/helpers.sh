@@ -19,7 +19,7 @@ spinner ()
 function say_done() {
     echo " "
     echo -e "Done."
-    say_continue
+    yes "" | say_continue
 }
 
 
