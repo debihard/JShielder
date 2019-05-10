@@ -93,7 +93,6 @@ f_banner
 
 ##############################################################################################################
 
-
 # Configure Hostname
 config_host() {
 echo -n " ¿Do you Wish to Set a HostName? (y/n): "; read config_host
@@ -211,6 +210,90 @@ uncommon_netprotocols(){
    echo " OK"
    say_done
 
+}
+
+##############################################################################################################
+
+# Create Privileged User
+admin_user(){
+    clear
+    f_banner
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo -e "\e[93m[+]\e[00m We will now Create a New User"
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo ""
+    echo -n " Type the new username: "; read username
+    adduser $username
+    mkdir /home/$username/.ssh
+    touch /home/$username/.ssh/authorized_keys
+    say_done
+}
+
+##############################################################################################################
+
+# Instruction to Generate RSA Keys
+rsa_keygen(){
+    clear
+    f_banner
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo -e "\e[93m[+]\e[00m Instructions to Generate an RSA KEY PAIR"
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo ""
+    serverip=$(__get_ip)
+    echo " *** IF YOU DONT HAVE A PUBLIC RSA KEY, GENERATE ONE ***"
+    echo "     Follow the Instruction and Hit Enter When Done"
+    echo "     To receive a new Instruction"
+    echo " "
+    echo "    RUN THE FOLLOWING COMMANDS"
+    echo -n "     a) ssh-keygen -t rsa -b 4096 "; read foo1
+    echo -n "     b) cat /home/$username/.ssh/id_rsa.pub >> /home/$username/.ssh/authorized_keys "; read foo2
+    say_done
+}
+##############################################################################################################
+
+# Move the Generated Public Key
+rsa_keycopy(){
+    echo " Run the Following Command to copy the Key"
+    echo " Press ENTER when done "
+    echo " ssh-copy-id -i $HOME/.ssh/id_rsa.pub $username@$serverip "
+    say_done
+}
+
+##############################################################################################################
+
+# Add manually the Generated Public Key
+rsa_add(){
+echo -n " Do you want add your user public key mannually? (y/n): "; read rsa_add_answer
+if [ "$rsa_add_answer" == "y" ]; then
+echo -n " Enter your public key here and press enter: ";read publickey
+echo "$publickey" >> /home/$username/.ssh/authorized_keys
+ echo ""
+  echo "Your key is successfully add!"
+      say_done   
+      
+ else
+ echo ""
+ echo "Ok"
+ say_done
+ fi
+ }
+    
+##############################################################################################################
+
+# Secure SSH
+secure_ssh(){
+    clear
+    f_banner
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo -e "\e[93m[+]\e[00m Securing SSH"
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo ""
+    echo -n " Securing SSH..."
+    spinner
+    sed s/USERNAME/$username/g templates/sshd_config > /etc/ssh/sshd_config; echo "OK"
+    chattr -i /home/$username/.ssh/authorized_keys
+    service ssh restart
+    say_done
 }
 
 ##############################################################################################################
@@ -1058,6 +1141,11 @@ update_system
 restrictive_umask
 unused_filesystems
 uncommon_netprotocols
+admin_user
+rsa_keygen
+rsa_keycopy
+rsa_add
+secure_ssh
 set_iptables
 install_fail2ban
 install_secure_mysql
