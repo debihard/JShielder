@@ -733,7 +733,7 @@ if [ -f /root/.my.cnf ]; then
 	#mysql -u "$usernamedb" -p "$userdbpass" "$dbname" < /root/JShielder/UbuntuServer_18.04LTS/a1/panel/info/dump.sql
 	mysql --user=$usernamedb  --password=$userdbpass $dbname < /root/JShielder/UbuntuServer_18.04LTS/a1/panel/info/dump.sql
 	
-
+        echo "Importing mysql dump successfull!"
 
 # If /root/.my.cnf doesn't exist then it'll ask for root password	
 else
@@ -761,6 +761,7 @@ else
 	
 	mysql --user=$usernamedb --password=$userdbpass $dbname < /root/JShielder/UbuntuServer_18.04LTS/a1/panel/info/dump.sql
 	
+	echo "Importing mysql dump successfull!"
 fi
      
 
@@ -792,7 +793,8 @@ chown -R www-data:www-data /var/www
 
 htpasswd -b -c /etc/apache2/.htpasswd $basicuser $basicpassword
 
-cat > /root/myconfig.conf << EOL
+touch /root/adminpanelsdata.txt
+cat > /root/adminpanelsdata.txt << EOL
 ##################################################################################################################
 ##################################################################################################################
 ##################################################################################################################
