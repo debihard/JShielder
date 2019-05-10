@@ -300,8 +300,10 @@ install_secure_php(){
     echo ""
     echo -n " Replacing php.ini..."
     spinner
-    cp templates/php /etc/php/7.2/apache2/php.ini; echo " OK"
-    cp templates/php /etc/php/7.2/cli/php.ini; echo " OK"
+    #cp templates/php /etc/php/7.2/apache2/php.ini; echo " OK"
+    #cp templates/php /etc/php/7.2/cli/php.ini; echo " OK"
+    cp templates/php /etc/php/7.2/apache2/php.ini.new; echo " OK"
+    cp templates/php /etc/php/7.2/cli/php.ini.new; echo " OK"
     service apache2 restart
     say_done
 }
@@ -461,7 +463,8 @@ secure_optimize_apache(){
     echo -e "\e[93m[+]\e[00m Optimizing Apache"
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
     echo ""
-    cp templates/apache /etc/apache2/apache2.conf
+    #cp templates/apache /etc/apache2/apache2.conf
+    cp templates/apache /etc/apache2/apache2.conf.new
     echo " -- Enabling ModRewrite"
     spinner
     a2enmod rewrite
