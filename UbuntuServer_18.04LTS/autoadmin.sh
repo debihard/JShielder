@@ -1117,6 +1117,28 @@ file_permissions(){
 }
 ##############################################################################################################
 
+# Reboot Server
+reboot_server(){
+    clear
+    f_banner
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo -e "\e[93m[+]\e[00m Final Step"
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo ""
+    sed -i s/USERNAME/$username/g templates/texts/bye
+    sed -i s/SERVERIP/$serverip/g templates/texts/bye
+    cat templates/texts/bye
+    echo -n " ¿Were you able to connect via SSH to the Server using $username? (y/n): "; read answer
+    if [ "$answer" == "y" ]; then
+        reboot
+    else
+        echo "Server will not Reboot"
+        echo "Bye."
+    fi
+}
+
+##################################################################################################################
+
 clear
 f_banner
 echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
@@ -1170,6 +1192,7 @@ secure_tmp
 apache_conf_restrictions
 unattended_upgrades
 file_permissions
+reboot
 ;;
 
 2)
