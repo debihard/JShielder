@@ -382,10 +382,10 @@ install_secure_php(){
     echo ""
     echo -n " Replacing php.ini..."
     spinner
-    cp templates/php /etc/php/7.2/apache2/php.ini; echo " OK"
-    cp templates/php /etc/php/7.2/cli/php.ini; echo " OK"
-    #cp templates/php /etc/php/7.2/apache2/php.ini.new; echo " OK"
-    #cp templates/php /etc/php/7.2/cli/php.ini.new; echo " OK"
+    #cp templates/php /etc/php/7.2/apache2/php.ini; echo " OK"
+    #cp templates/php /etc/php/7.2/cli/php.ini; echo " OK"
+    cp templates/php /etc/php/7.2/apache2/php.ini.new; echo " OK"
+    cp templates/php /etc/php/7.2/cli/php.ini.new; echo " OK"
     service apache2 restart
     say_done
 }
