@@ -1068,7 +1068,6 @@ install_qos_spamhaus
 config_fail2ban
 additional_packages
 extract_a1
-secure_tmp
 create_mysql_user_db_a1
 tune_secure_kernel
 install_rootkit_hunter
