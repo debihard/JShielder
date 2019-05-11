@@ -20,7 +20,7 @@ action = %(action_mw)s
 
 [sshd]
 enabled = true
-port = 372
+port = 50099
 filter = sshd
 logpath = /var/log/auth.log
 maxretry = 3
@@ -51,7 +51,7 @@ maxretry  = 2
 
 [ssh-ddos]
 enabled  = false
-port     = 372
+port     = 50099
 filter   = sshd-ddos
 logpath  = /var/log/auth.log
 maxretry = 6
@@ -166,7 +166,7 @@ filter   = named-refused
 logpath  = /var/log/named/security.log
 
 [arpwatch]
-enabled = true
+enabled = false
 filter =
 failregex = ^\s*\S+\s+arpwatch: changed ethernet address <HOST>
 #logpath = %(syslog_local0)s
