@@ -263,7 +263,7 @@ rsa_keycopy(){
 
 # Add manually the Generated Public Key
 rsa_add(){
-echo -n " Do you want add your user public key mannually? (y/n): "; read rsa_add_answer
+yes y | echo -n " Do you want add your user public key mannually? (y/n): "; read rsa_add_answer
 if [ "$rsa_add_answer" == "y" ]; then
 echo -n " Enter your public key here and press enter: ";read -s publickey
 echo "$publickey" >> /home/$username/.ssh/authorized_keys
@@ -1012,7 +1012,7 @@ secure_tmp(){
   echo -e "\e[93m[+]\e[00m Securing /tmp Folder"
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo ""
-  echo -n " ¿Did you Create a Separate /tmp partition during the Initial Installation? (y/n): "; read tmp_answer
+  yes y | echo -n " ¿Did you Create a Separate /tmp partition during the Initial Installation? (y/n): "; read tmp_answer
   if [ "$tmp_answer" == "n" ]; then
       echo "We will create a FileSystem for the /tmp Directory and set Proper Permissions "
       spinner
@@ -1177,9 +1177,7 @@ restrictive_umask
 unused_filesystems
 uncommon_netprotocols
 admin_user
-rsa_keygen
-rsa_keycopy
-yes y | rsa_add
+rsa_add
 secure_ssh
 set_iptables
 install_fail2ban
@@ -1201,7 +1199,7 @@ tune_nano_vim_bashrc
 daily_update_cronjob
 yes y | additional_hardening
 disable_compilers
-say n | secure_tmp
+secure_tmp
 apache_conf_restrictions
 say y | unattended_upgrades
 file_permissions
