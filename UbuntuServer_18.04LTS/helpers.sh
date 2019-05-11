@@ -33,6 +33,15 @@ function say_continue() {
     echo " "
 }
 
+# Ask to Continue
+function say_continue_2() {
+    echo -n " To EXIT Press x Key, Press ENTER to Continue"
+    read acc
+    if [ "$acc" == "x" ]; then
+        exit
+    fi
+    echo " "
+}
 
 # Obtain Server IP
 function __get_ip() {
