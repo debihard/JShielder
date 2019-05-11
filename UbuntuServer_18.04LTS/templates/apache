@@ -51,9 +51,6 @@ AccessFileName .htaccess
 
 <Directory /var/www/html>
         Options -Indexes -Includes -ExecCGI
-    <LimitExcept GET POST HEAD>
-       deny from all
-    </LimitExcept>
         AllowOverride All
         Require all granted
 </Directory>
