@@ -555,7 +555,7 @@ secure_optimize_apache(){
     echo ""
     cp templates/apache /etc/apache2/apache2.conf.new
     cp /etc/apache2/apache2.conf{,.bak}
-    mv /etc/apache2/apache2.conf.new /etc/apache2/apache2.conf
+    #mv /etc/apache2/apache2.conf.new /etc/apache2/apache2.conf
     echo " -- Enabling ModRewrite"
     spinner
     a2enmod rewrite
