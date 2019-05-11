@@ -265,7 +265,7 @@ rsa_keycopy(){
 
 # Add manually the Generated Public Key
 rsa_add(){
-echo t 1 -e -p " Do you want add your user public key mannually? (y/n): " -i "y" rsa_add_answer
+echo t 3 -e -p " Do you want add your user public key mannually? (y/n): " -i "y" rsa_add_answer
 #echo -n " Do you want add your user public key mannually? (y/n): "; read rsa_add_answer
 if [ "$rsa_add_answer" == "y" ]; then
 echo -n " Now we need to add your ssh key"
@@ -274,11 +274,13 @@ echo "$publickey" >> /home/$username/.ssh/authorized_keys
  echo ""
  spinner
   echo "Your key is successfully add!"
+      say_continue_2
       say_done   
       
  else
  echo ""
  echo "Ok"
+ say_continue_2
  say_done
  fi
  }
@@ -640,7 +642,7 @@ secure_optimize_apache(){
     echo ""
     cp templates/apache /etc/apache2/apache2.conf.new
     cp /etc/apache2/apache2.conf{,.bak}
-    #mv /etc/apache2/apache2.conf.new /etc/apache2/apache2.conf
+    mv /etc/apache2/apache2.conf.new /etc/apache2/apache2.conf
     echo " -- Enabling ModRewrite"
     spinner
     a2enmod rewrite
@@ -1097,7 +1099,7 @@ secure_tmp(){
   echo -e "\e[93m[+]\e[00m Securing /tmp Folder"
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo ""
-  read -t 1 -e -p " ¿Did you Create a Separate /tmp partition during the Initial Installation? (y/n): " -i "n" tmp_answer
+  read -t 3 -e -p " ¿Did you Create a Separate /tmp partition during the Initial Installation? (y/n): " -i "n" tmp_answer
   #echo -n " ¿Did you Create a Separate /tmp partition during the Initial Installation? (y/n): "; read tmp_answer
   if [ "$tmp_answer" == "n" ]; then
       echo "We will create a FileSystem for the /tmp Directory and set Proper Permissions "
@@ -1111,6 +1113,7 @@ secure_tmp(){
       rm -rf /tmpbackup
       echo "/usr/tmpDISK  /tmp    tmpfs   loop,nosuid,nodev,noexec,rw  0 0" >> /etc/fstab
       sudo mount -o remount /tmp
+      say_continue_2
       say_done
   else
       echo "Nice Going, Remember to set proper permissions in /etc/fstab"
@@ -1118,6 +1121,7 @@ secure_tmp(){
       echo "Example:"
       echo ""
       echo "/dev/sda4   /tmp   tmpfs  loop,nosuid,noexec,rw  0 0 "
+      say_continue_2
       say_done
   fi
 }
@@ -1275,7 +1279,6 @@ set_owasp_rules
 secure_optimize_apache
 install_modevasive
 config_fail2ban
-additional_packages
 extract_a1
 create_mysql_user_db_a1
 tune_secure_kernel
