@@ -223,7 +223,7 @@ admin_user(){
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
     echo ""
     echo -n " Type the new username: "; read username
-    adduser $username
+    adduser --gecos "" $username
     mkdir /home/$username/.ssh
     touch /home/$username/.ssh/authorized_keys
     say_done
