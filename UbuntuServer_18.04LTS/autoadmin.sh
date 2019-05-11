@@ -265,8 +265,9 @@ rsa_keycopy(){
 
 # Add manually the Generated Public Key
 rsa_add(){
+echo t 1 -e -p " Do you want add your user public key mannually? (y/n): " -i "y" rsa_add_answer
 #echo -n " Do you want add your user public key mannually? (y/n): "; read rsa_add_answer
-#if [ "$rsa_add_answer" == "y" ]; then
+if [ "$rsa_add_answer" == "y" ]; then
 echo -n " Now we need to add your ssh key"
 echo -n " Enter your public key here and press enter: ";read -s publickey
 echo "$publickey" >> /home/$username/.ssh/authorized_keys
@@ -275,7 +276,7 @@ echo "$publickey" >> /home/$username/.ssh/authorized_keys
   echo "Your key is successfully add!"
       say_done   
       
- #else
+ else
  echo ""
  echo "Ok"
  say_done
@@ -475,8 +476,8 @@ install_secure_php(){
     cp templates/php /etc/php/7.2/apache2/php.ini.new; echo " OK"
     cp templates/php /etc/php/7.2/cli/php.ini.new; echo " OK"
     
-    #mv /etc/php/7.2/apache2/php.ini.new /etc/php/7.2/apache2/php.ini; echo " OK"
-    #mv /etc/php/7.2/cli/php.ini.new /etc/php/7.2/cli/php.ini; echo " OK"
+    mv /etc/php/7.2/apache2/php.ini.new /etc/php/7.2/apache2/php.ini; echo " OK"
+    mv /etc/php/7.2/cli/php.ini.new /etc/php/7.2/cli/php.ini; echo " OK"
     
     service apache2 restart
     say_done
@@ -773,8 +774,8 @@ apt -y install gpw
 
 # Autodetect IP address and pre-fill for the user
 IP="$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)"
-usernamedb=userdb_"$(gpw 1 12)"
-userdbpass=userpass_"$(pwgen 22 1)"
+usernamedb=dbuser_"$(gpw 1 12)"
+userdbpass=dbuser_pass_"$(pwgen 22 1)"
 charset=utf8
 dbname=db_"$(gpw 1 12)"
 panelname="$(gpw 1 12)"
@@ -887,8 +888,8 @@ chown -R www-data:www-data /var/www
 
 htpasswd -b -c /etc/apache2/.htpasswd $basicuser $basicpassword
 
-touch /root/adminpanelsdata.txt
-cat > /root/adminpanelsdata.txt << EOL
+touch /home/secure/adminpanelsdata.txt
+cat > /home/secure/adminpanelsdata.txt << EOL
 ##################################################################################################################
 ##################################################################################################################
 ##################################################################################################################
@@ -1096,7 +1097,8 @@ secure_tmp(){
   echo -e "\e[93m[+]\e[00m Securing /tmp Folder"
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo ""
-  yes y | echo -n " ¿Did you Create a Separate /tmp partition during the Initial Installation? (y/n): "; read tmp_answer
+  read -t 1 -e -p " ¿Did you Create a Separate /tmp partition during the Initial Installation? (y/n): " -i "n" tmp_answer
+  #echo -n " ¿Did you Create a Separate /tmp partition during the Initial Installation? (y/n): "; read tmp_answer
   if [ "$tmp_answer" == "n" ]; then
       echo "We will create a FileSystem for the /tmp Directory and set Proper Permissions "
       spinner
@@ -1283,7 +1285,7 @@ tune_nano_vim_bashrc
 daily_update_cronjob
 yes y | additional_hardening
 disable_compilers
-secure_tmp
+say n |secure_tmp
 apache_conf_restrictions
 say y | unattended_upgrades
 file_permissions
