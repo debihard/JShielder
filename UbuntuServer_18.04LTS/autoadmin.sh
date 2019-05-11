@@ -1274,7 +1274,6 @@ install_modsecurity
 set_owasp_rules
 secure_optimize_apache
 install_modevasive
-install_qos_spamhaus
 config_fail2ban
 additional_packages
 extract_a1
@@ -1285,7 +1284,7 @@ tune_nano_vim_bashrc
 daily_update_cronjob
 yes y | additional_hardening
 disable_compilers
-say n |secure_tmp
+secure_tmp
 apache_conf_restrictions
 say y | unattended_upgrades
 file_permissions
