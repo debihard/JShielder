@@ -121,7 +121,7 @@ iptables -A INPUT -p tcp -m tcp --dport 443 -j ACCEPT
 
 # ssh & sftp
 
-iptables -A INPUT -p tcp -m tcp --dport 372 -j ACCEPT
+iptables -A INPUT -p tcp -m tcp --dport 50099 -j ACCEPT
 
 
 
@@ -132,5 +132,5 @@ iptables -A INPUT -p icmp --icmp-type 0 -j ACCEPT
 
 # Limit SSH connection from a single IP
 
-iptables -A INPUT -p tcp --syn --dport 372 -m connlimit --connlimit-above 2 -j REJECT
+iptables -A INPUT -p tcp --syn --dport 50099 -m connlimit --connlimit-above 4 -j REJECT
 
