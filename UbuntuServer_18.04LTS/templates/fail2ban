@@ -173,13 +173,3 @@ failregex = ^\s*\S+\s+arpwatch: changed ethernet address <HOST>
 logpath = /var/log/syslog
 #findtime  = 600
 #maxretry = 5
-
-[Definition]
-
-# Option:  failregex
-# Notes.:  regex to match the Forbidden log entrys in apache error.log
-#          maybe (but not only) provided by mod_evasive
-#
-# Values:  TEXT
-#
-failregex = ^\^\*\]\s+\[error\]\s+\[client <HOST>\] client denied by server configuration:\s
