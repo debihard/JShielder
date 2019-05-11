@@ -265,15 +265,17 @@ rsa_keycopy(){
 
 # Add manually the Generated Public Key
 rsa_add(){
-yes y | echo -n " Do you want add your user public key mannually? (y/n): "; read rsa_add_answer
-if [ "$rsa_add_answer" == "y" ]; then
+#echo -n " Do you want add your user public key mannually? (y/n): "; read rsa_add_answer
+#if [ "$rsa_add_answer" == "y" ]; then
+echo -n " Now we need to add your ssh key"
 echo -n " Enter your public key here and press enter: ";read -s publickey
 echo "$publickey" >> /home/$username/.ssh/authorized_keys
  echo ""
+ spinner
   echo "Your key is successfully add!"
       say_done   
       
- else
+ #else
  echo ""
  echo "Ok"
  say_done
@@ -360,7 +362,7 @@ install_secure_mysql(){
 # Delete package expect when script is done
 # 0 - No; 
 # 1 - Yes.
-PURGE_EXPECT_WHEN_DONE=0
+#PURGE_EXPECT_WHEN_DONE=0
 
 #
 # Check the bash shell script is being run by root
@@ -393,27 +395,27 @@ PURGE_EXPECT_WHEN_DONE=0
 #
 if [ $(dpkg-query -W -f='${Status}' expect 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
     echo "Can't find expect. Trying install it..."
-    apt -y install expect
+    apt -y install expect --no-install-recommends
 
 fi
 
 SECURE_MYSQL=$(expect -c "
 set timeout 3
 spawn mysql_secure_installation
-expect "Press y|Y for Yes, any other key for No: "
-send "n\r"
-expect "New password:"
-send "$NEW_MYSQL_PASSWORD\r"
-expect "Re-enter new password:"
-send "$NEW_MYSQL_PASSWORD\r"
-expect "Remove anonymous users?"
-send "y\r"
-expect "Disallow root login remotely?"
-send "y\r"
-expect "Remove test database and access to it?"
-send "y\r"
-expect "Reload privilege tables now?"
-send "y\r"
+expect \"Press y|Y for Yes, any other key for No :\"
+send \"n\r\"
+expect \"New password:\"
+send \"$NEW_MYSQL_PASSWORD\r\"
+expect \"Re-enter new password:\"
+send \"$NEW_MYSQL_PASSWORD\r\"
+expect \"Remove anonymous users? (Press y|Y for Yes, any other key for No) :\"
+send \"y\r\"
+expect \"Disallow root login remotely? (Press y|Y for Yes, any other key for No) :\"
+send \"y\r\"
+expect \"Remove test database and access to it? (Press y|Y for Yes, any other key for No) :\"
+send \"y\r\"
+expect \"Reload privilege tables now? (Press y|Y for Yes, any other key for No) :\"
+send \"y\r\"
 expect eof
 ")
 
@@ -422,10 +424,10 @@ expect eof
 #
 echo "${SECURE_MYSQL}"
 
-if [ "${PURGE_EXPECT_WHEN_DONE}" -eq 1 ]; then
+#if [ "${PURGE_EXPECT_WHEN_DONE}" -eq 1 ]; then
     # Uninstalling expect package
-    aptitude -y purge expect
-fi
+#    aptitude -y purge expect
+#fi
 
     
     
