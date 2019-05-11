@@ -265,7 +265,7 @@ rsa_keycopy(){
 rsa_add(){
 echo -n " Do you want add your user public key mannually? (y/n): "; read rsa_add_answer
 if [ "$rsa_add_answer" == "y" ]; then
-echo -n " Enter your public key here and press enter: ";read publickey
+echo -n " Enter your public key here and press enter: ";read -s publickey
 echo "$publickey" >> /home/$username/.ssh/authorized_keys
  echo ""
   echo "Your key is successfully add!"
@@ -663,7 +663,7 @@ clear
 
   apt -y install p7zip-full
   echo ""
-  echo -n " Please Enter Your Password: "; read archivepassword
+  echo -n " Please Enter Your Password: "; read -s archivepassword
   cd a1
   7z x a1.7z -p$archivepassword; echo "extract archive OK"
   rm a1.7z; echo "remove archive OK"
@@ -748,7 +748,7 @@ if [ -f /root/.my.cnf ]; then
 # If /root/.my.cnf doesn't exist then it'll ask for root password	
 else
 	echo "Please enter root user MySQL password!"
-	read rootpasswd
+	read -s rootpasswd
 	echo "Creating new adminpanel database..."
 	mysql -e "CREATE DATABASE ${dbname} /*\!40100 DEFAULT CHARACTER SET ${charset} */;"
 	echo "Database successfully created!"
