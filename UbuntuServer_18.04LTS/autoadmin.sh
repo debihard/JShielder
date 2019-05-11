@@ -129,7 +129,9 @@ config_timezone(){
    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
    echo ""
    sleep 10
-   dpkg-reconfigure tzdata
+   #dpkg-reconfigure tzdata
+   ln -fs /usr/share/zoneinfo/Europe/Kyiv /etc/localtime
+   dpkg-reconfigure --frontend noninteractive tzdata
    say_done
 }
 
