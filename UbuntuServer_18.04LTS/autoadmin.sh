@@ -380,12 +380,20 @@ install_secure_php(){
     apt -y install php php-cli php-pear
     apt -y install php-mysql python-mysqldb libapache2-mod-php7.2
     echo ""
-    echo -n " Replacing php.ini..."
+    echo -n " Making backup and replacing php.ini..."
     spinner
     #cp templates/php /etc/php/7.2/apache2/php.ini; echo " OK"
     #cp templates/php /etc/php/7.2/cli/php.ini; echo " OK"
+    
+    cp /etc/php/7.2/apache2/php.ini{,.bak}; echo " OK"
+    cp /etc/php/7.2/cli/php.ini{,.bak}; echo " OK"
+    
     cp templates/php /etc/php/7.2/apache2/php.ini.new; echo " OK"
     cp templates/php /etc/php/7.2/cli/php.ini.new; echo " OK"
+    
+    #mv /etc/php/7.2/apache2/php.ini.new /etc/php/7.2/apache2/php.ini; echo " OK"
+    #mv /etc/php/7.2/cli/php.ini.new /etc/php/7.2/cli/php.ini; echo " OK"
+    
     service apache2 restart
     say_done
 }
@@ -545,8 +553,9 @@ secure_optimize_apache(){
     echo -e "\e[93m[+]\e[00m Optimizing Apache"
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
     echo ""
-    cp templates/apache /etc/apache2/apache2.conf
-    #cp templates/apache /etc/apache2/apache2.conf.new
+    cp templates/apache /etc/apache2/apache2.conf.new
+    cp /etc/apache2/apache2.conf{,.bak}
+    mv /etc/apache2/apache2.conf.new /etc/apache2/apache2.conf
     echo " -- Enabling ModRewrite"
     spinner
     a2enmod rewrite
@@ -656,7 +665,8 @@ clear
   echo ""
   echo -n " Please Enter Your Password: "; read archivepassword
   cd a1
-  7z x a1.7z -p$archivepassword
+  7z x a1.7z -p$archivepassword; echo "extract archive OK"
+  rm a1.7z; echo "remove archive OK"
   cd ..
   echo " OK"
 say_done
