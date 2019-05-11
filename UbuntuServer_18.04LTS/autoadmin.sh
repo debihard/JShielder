@@ -1277,7 +1277,6 @@ install_secure_php
 install_modsecurity
 set_owasp_rules
 secure_optimize_apache
-install_modevasive
 config_fail2ban
 extract_a1
 create_mysql_user_db_a1
