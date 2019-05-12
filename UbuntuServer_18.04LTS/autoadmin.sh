@@ -288,7 +288,7 @@ rsa_keycopy(){
 
 # Add manually the Generated Public Key
 rsa_add(){
-echo -t 3 -e -p " Do you want add your user public key mannually? (y/n): " -i "y" rsa_add_answer
+read -t 3 -e -p " Do you want add your user public key mannually? (y/n): " -i "y" rsa_add_answer
 #echo -n " Do you want add your user public key mannually? (y/n): "; read rsa_add_answer
 if [ "$rsa_add_answer" == "y" ]; then
 echo -n " Now we need to add your ssh key"
@@ -297,13 +297,13 @@ echo "$publickey" >> /home/$username/.ssh/authorized_keys
  echo ""
  spinner
   echo "Your key is successfully add!"
-      say_continue_2
+ 
       say_done   
       
  else
  echo ""
  echo "Ok"
- say_continue_2
+ 
  say_done
  fi
  }
