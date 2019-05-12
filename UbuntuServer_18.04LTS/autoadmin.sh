@@ -230,23 +230,27 @@ admin_user(){
     echo ""
     
     
-    echo -n " Type the new username: "; read UserName
-    PassWord=$UserName_main_password_$(pwgen 22 1)
+    echo -n " Type the new username: "; read username
+    PassWord=$username_main_password_$(pwgen 22 1)
 
-if id -u "$UserName" >/dev/null 2>&1; then
-    userdel -r -f "$UserName"
-fi
+#if id -u "$UserName" >/dev/null 2>&1; then
+#    userdel -r -f "$UserName"
+#fi
 
-adduser --disabled-password --gecos "" "$UserName"
-userdir=/home/"$UserName"
-[[ -d $userdir ]] || mkdir "$userdir"   # only needed for system users.
+#adduser --disabled-password --gecos "" "$UserName"
+#userdir=/home/"$UserName"
+#[[ -d $userdir ]] || mkdir "$userdir"   # only needed for system users.
                                         # which usually do not have a password.
-echo "$UserName:$PassWord" | chpasswd
+#echo "$UserName:$PassWord" | chpasswd
     
     #echo -n " Type the new username: "; read username
     #adduser --gecos "" $username
-    #mkdir /home/$username/.ssh
+    echo -e "$PassWord\n$PassWord\n" | sudo passwd $username
+
+    mkdir /home/$username/.ssh
     touch /home/$username/.ssh/authorized_keys
+    touch /home/$username/userpass
+    echo -e "Shell username is: $username\nPassword of $username is: $PassWord" > /home/$username/userpass
     say_done
 }
 
@@ -909,8 +913,8 @@ chown -R www-data:www-data /var/www
 
 htpasswd -b -c /etc/apache2/.htpasswd $basicuser $basicpassword
 
-touch /home/secure/adminpanelsdata.txt
-cat > /home/secure/adminpanelsdata.txt << EOL
+touch /home/$username/adminpanelsdata.txt
+cat > /home/$username/adminpanelsdata.txt << EOL
 ##################################################################################################################
 ##################################################################################################################
 ##################################################################################################################
