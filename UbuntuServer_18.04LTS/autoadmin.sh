@@ -228,7 +228,24 @@ admin_user(){
     echo -e "\e[93m[+]\e[00m We will now Create a New User"
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
     echo ""
-    echo -n " Type the new username: "; read username
+    
+    
+    echo -n " Type the new username: "; read USERNAME
+    PASSWORD=$USERNAME_main_password_$(pwgen 22 1)
+
+if id -u "$USERNAME" >/dev/null 2>&1; then
+    userdel -r -f $USERNAME
+    useradd -m -p $PASSWORD -s /bin/bash $USERNAME
+    usermod -a -G sudo $USERNAME
+    echo $USERNAME:$PASSWORD | chpasswd
+
+else
+    useradd -m -p $PASSWORD -s /bin/bash $USERNAME
+    usermod -a -G sudo $USERNAME
+    echo $USERNAME:$PASSWORD | chpasswd
+fi
+    
+    #echo -n " Type the new username: "; read username
     adduser --gecos "" $username
     mkdir /home/$username/.ssh
     touch /home/$username/.ssh/authorized_keys
