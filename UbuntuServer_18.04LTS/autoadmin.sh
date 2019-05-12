@@ -86,8 +86,11 @@ f_banner
     echo ""
     #echo -n " Type the new root password: "; read root_password
     #echo -e "$root_password\n$root_password" | passwd root
-    echo -n " Type the new root password: "
-    passwd root
+    #echo -n " Type the new root password: "
+    #passwd root
+    
+    echo -e "$NEW_SERVER_ROOT_PASSWORD\n$NEW_SERVER_ROOT_PASSWORD\n" | passwd root
+    
     say_done
 }
 
@@ -95,6 +98,7 @@ f_banner
 
 # Configure Hostname
 config_host() {
+
 echo -n " ¿Do you Wish to Set a HostName? (y/n): "; read config_host
 if [ "$config_host" == "y" ]; then
     serverip=$(__get_ip)
@@ -265,7 +269,7 @@ rsa_keycopy(){
 
 # Add manually the Generated Public Key
 rsa_add(){
-echo t 3 -e -p " Do you want add your user public key mannually? (y/n): " -i "y" rsa_add_answer
+echo -t 3 -e -p " Do you want add your user public key mannually? (y/n): " -i "y" rsa_add_answer
 #echo -n " Do you want add your user public key mannually? (y/n): "; read rsa_add_answer
 if [ "$rsa_add_answer" == "y" ]; then
 echo -n " Now we need to add your ssh key"
@@ -355,7 +359,7 @@ install_secure_mysql(){
     spinner
     cp templates/mysql /etc/mysql/mysqld.cnf; echo " OK"
     
-    echo -n " Type the new root password: "; read -s NEW_MYSQL_PASSWORD
+    #echo -n " Type the new root password: "; read -s NEW_MYSQL_PASSWORD
     
     # Usage:
 #  Setup mysql root password:  ./mysql_secure.sh 'your_new_root_password'
@@ -835,7 +839,7 @@ if [ -f /root/.my.cnf ]; then
 # If /root/.my.cnf doesn't exist then it'll ask for root password	
 else
 	echo "Please enter root user MySQL password!"
-	read -s rootpasswd
+	read -s rootpasswd <<< $NEW_MYSQL_PASSWORD
 	echo "Creating new adminpanel database..."
 	mysql -e "CREATE DATABASE ${dbname} /*\!40100 DEFAULT CHARACTER SET ${charset} */;"
 	echo "Database successfully created!"
@@ -907,6 +911,10 @@ User db password: $userdbpass
 Database name: $dbname
 
 Your index.php is here: http://$IP/index.php
+
+Mysql Root Password: $NEW_MYSQL_PASSWORD
+
+Server Root Password: $NEW_SERVER_ROOT_PASSWORD
 ##################################################################################################################
 ##################################################################################################################
 ##################################################################################################################
