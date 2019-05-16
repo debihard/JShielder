@@ -55,6 +55,7 @@ apt -y install software-properties-common
 apt -y install screen
 apt -y install pwgen 
 apt -y install gpw
+apt -y install secure-delete
 
 menu=""
 until [ "$menu" = "10" ]; do
