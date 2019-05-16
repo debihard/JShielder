@@ -722,6 +722,7 @@ config_fail2ban(){
     echo ""
     echo " Configuring Fail2Ban......"
     spinner
+    cp templates/portscan.conf /etc/fail2ban/filter.d/portscan.conf
     sed s/MAILTO/$inbox/g templates/fail2ban > /etc/fail2ban/jail.local
     cp /etc/fail2ban/jail.local /etc/fail2ban/jail.conf
     /etc/init.d/fail2ban restart
