@@ -33,6 +33,13 @@ function say_continue() {
     echo " "
 }
 
+# Show "Done."
+function say_done_2() {
+    echo " "
+    echo -e "Done."
+    say_continue_2
+}
+
 # Ask to Continue
 function say_continue_2() {
     echo -n " To EXIT Press x Key, Press ENTER to Continue"
