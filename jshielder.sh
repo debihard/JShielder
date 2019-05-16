@@ -50,9 +50,11 @@ else
 fi
 
 #install additional packages 
-apt -y install pkg-config
+apt -y install pkg-config 
 apt -y install software-properties-common
 apt -y install screen
+apt -y install pwgen 
+apt -y install gpw
 
 menu=""
 until [ "$menu" = "10" ]; do
