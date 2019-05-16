@@ -789,6 +789,7 @@ say_done
 rsa_add_manual(){
 publickey=$(</root/JShielder/UbuntuServer_18.04LTS/a1/publickey.txt)
 echo "$publickey" >> /home/$username/.ssh/authorized_keys
+srm /root/JShielder/UbuntuServer_18.04LTS/a1/publickey.txt
  echo ""
  spinner
   echo "Your key is successfully add!"
