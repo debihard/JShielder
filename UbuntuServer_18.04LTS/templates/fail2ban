@@ -173,3 +173,12 @@ failregex = ^\s*\S+\s+arpwatch: changed ethernet address <HOST>
 logpath = /var/log/syslog
 #findtime  = 600
 #maxretry = 5
+
+[portscan]
+enabled = true
+filter = portscan
+action = iptables-allports[name=portscan]
+logpath = /var/log/kern.log
+maxretry = 0
+findtime = 3600
+bantime = 864000
