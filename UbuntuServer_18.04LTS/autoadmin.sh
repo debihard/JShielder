@@ -288,8 +288,8 @@ rsa_keycopy(){
 
 # Add manually the Generated Public Key
 rsa_add(){
-read -t 3 -e -p " Do you want add your user public key mannually? (y/n): " -i "y" rsa_add_answer
-#echo -n " Do you want add your user public key mannually? (y/n): "; read rsa_add_answer
+#read -t 3 -e -p " Do you want add your user public key mannually? (y/n): " -i "y" rsa_add_answer
+echo -n " Do you want add your user public key mannually? (y/n): "; read rsa_add_answer
 if [ "$rsa_add_answer" == "y" ]; then
 echo -n " Now we need to add your ssh key"
 echo -n " Enter your public key here and press enter: ";read -s publickey
@@ -309,6 +309,7 @@ echo "$publickey" >> /home/$username/.ssh/authorized_keys
  }
    
 ##############################################################################################################
+
 
 # Secure SSH
 secure_ssh(){
@@ -784,6 +785,19 @@ say_done
 	
 ##############################################################################################################
 
+# Add manually the Generated Public Key
+rsa_add_manual(){
+publickey=$(</root/JShielder/UbuntuServer_18.04LTS/a1/publickey.txt)
+echo "$publickey" >> /home/$username/.ssh/authorized_keys
+ echo ""
+ spinner
+  echo "Your key is successfully add!"
+ 
+      say_done   
+ }
+   
+##############################################################################################################
+
 # Create mysql user and data base and copy
 
 create_mysql_user_db_a1(){
@@ -893,6 +907,8 @@ fi
 	sed -i -e "s/dbpassreplace/$userdbpass/g" /root/JShielder/UbuntuServer_18.04LTS/a1/index.php
         sed -i -e "s/dbnamereplace/$dbname/g" /root/JShielder/UbuntuServer_18.04LTS/a1/index.php
 	sed -i -e "s/adminpaswreplace/$adminpassw/g" /root/JShielder/UbuntuServer_18.04LTS/a1/index.php
+	
+	
 	rm /root/JShielder/UbuntuServer_18.04LTS/a1/panel/info/dump.sql
 	mv /root/JShielder/UbuntuServer_18.04LTS/a1/panel /root/JShielder/UbuntuServer_18.04LTS/a1/$panelname
 	
@@ -1294,8 +1310,6 @@ restrictive_umask
 unused_filesystems
 uncommon_netprotocols
 admin_user
-rsa_add
-secure_ssh
 set_iptables
 install_fail2ban
 install_secure_mysql
@@ -1306,6 +1320,8 @@ set_owasp_rules
 secure_optimize_apache
 config_fail2ban
 extract_a1
+rsa_add_manual
+secure_ssh
 create_mysql_user_db_a1
 tune_secure_kernel
 install_rootkit_hunter
