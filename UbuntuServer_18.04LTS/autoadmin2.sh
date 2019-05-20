@@ -668,6 +668,7 @@ secure_optimize_apache(){
     echo " -- Enabling ModRewrite"
     spinner
     a2enmod rewrite
+    a2enmod headers
     service apache2 restart
     say_done
 }
