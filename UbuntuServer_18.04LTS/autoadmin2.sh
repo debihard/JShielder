@@ -1137,8 +1137,7 @@ secure_tmp(){
   echo -e "\e[93m[+]\e[00m Securing /tmp Folder"
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo ""
-  read -t 3 -e -p " ¿Did you Create a Separate /tmp partition during the Initial Installation? (y/n): " -i "n" tmp_answer
-  #echo -n " ¿Did you Create a Separate /tmp partition during the Initial Installation? (y/n): "; read tmp_answer
+  echo -n " ¿Did you Create a Separate /tmp partition during the Initial Installation? (y/n): "; read tmp_answer
   if [ "$tmp_answer" == "n" ]; then
       echo "We will create a FileSystem for the /tmp Directory and set Proper Permissions "
       spinner
@@ -1353,6 +1352,8 @@ create_mysql_user_db_a1
 tune_secure_kernel
 install_rootkit_hunter
 tune_nano_vim_bashrc
+cat_setup_info
+srm_setup_info
 daily_update_cronjob
 yes y | additional_hardening
 disable_compilers
