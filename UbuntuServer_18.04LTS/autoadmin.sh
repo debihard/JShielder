@@ -214,7 +214,7 @@ uncommon_netprotocols(){
    echo "install rds /bin/true" >> /etc/modprobe.d/CIS.conf
    echo "install tipc /bin/true" >> /etc/modprobe.d/CIS.conf
    echo " OK"
-   say_done
+   say_done_2
 
 }
 
@@ -230,7 +230,7 @@ admin_user(){
     echo ""
     
     
-    #echo -n " Type the new username: "; read username
+    echo -n " Type the new username: "; read username
     PassWord=$username_main_password_$(pwgen 22 1)
 
 #if id -u "$UserName" >/dev/null 2>&1; then
@@ -243,7 +243,7 @@ admin_user(){
                                         # which usually do not have a password.
 #echo "$UserName:$PassWord" | chpasswd
     
-   echo -n " Type the new username: "; read username
+   #echo -n " Type the new username: "; read username
     adduser --gecos "" $username
     echo -e "$PassWord\n$PassWord\n" | sudo passwd $username
 
