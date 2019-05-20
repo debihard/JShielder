@@ -1951,6 +1951,12 @@ chmod +x autoadmin.sh
 ;;
 
 9)
+cd /root/JShielder/UbuntuServer_18.04LTS
+chmod +x autoadmin2.sh
+./autoadmin2.sh
+;;
+
+10)
 exit 0
 ;;
 
