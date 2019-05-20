@@ -281,7 +281,7 @@ rsa_keycopy(){
     echo " Run the Following Command to copy the Key"
     echo " Press ENTER when done "
     echo " ssh-copy-id -i $HOME/.ssh/id_rsa.pub $username@$serverip "
-    say_done
+    say_done_2
 }
 
 ##############################################################################################################
@@ -1335,7 +1335,6 @@ secure_tmp
 apache_conf_restrictions
 say y | unattended_upgrades
 file_permissions
-reboot
 ;;
 
 2)
