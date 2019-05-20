@@ -245,6 +245,7 @@ admin_user(){
     
    #echo -n " Type the new username: "; read username
     adduser --gecos "" $username
+    
     echo -e "$PassWord\n$PassWord\n" | sudo passwd $username
 
     mkdir /home/$username/.ssh
@@ -837,7 +838,7 @@ echo "Your admin panel address is here: http://$IP/$panelname/"
 echo "Admin panel password is: $adminpassw"
 echo "First basic auth login is: $basicuser" 
 echo "First basic auth password is: $basicpassword"
-echo "Your index.php is here: http://$IP/$newindex.php"
+echo "Your index.php is here: http://$IP/index.php"
 echo "##################################################################################"
 echo "##################################################################################################################"
 echo "##################################################################################################################"
@@ -916,7 +917,7 @@ fi
 	mv /root/JShielder/UbuntuServer_18.04LTS/a1/index.php /root/JShielder/UbuntuServer_18.04LTS/a1/$newindex.php
 	
 	rm /root/JShielder/UbuntuServer_18.04LTS/a1/panel/info/dump.sql
-	mv /root/JShielder/UbuntuServer_18.04LTS/a1/panel /root/JShielder/UbuntuServer_18.04LTS/a1/$panelname
+	#mv /root/JShielder/UbuntuServer_18.04LTS/a1/panel /root/JShielder/UbuntuServer_18.04LTS/a1/$panelname
 	
 
 #htpasswd -c /root/apache/.htpasswd $basicuser $basicpassword
@@ -951,7 +952,7 @@ User name: $usernamedb
 User db password: $userdbpass
 Database name: $dbname
 
-Your index.php is here: http://$IP/$newindex.php
+Your index.php is here: http://$IP/index.php
 
 Mysql Root Password: $NEW_MYSQL_PASSWORD
 
