@@ -1308,8 +1308,6 @@ install_fail2ban
 install_secure_mysql
 install_apache
 install_secure_php
-install_modsecurity
-set_owasp_rules
 secure_optimize_apache
 config_fail2ban
 extract_a1
