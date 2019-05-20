@@ -820,6 +820,7 @@ userdbpass=dbuser_pass_"$(pwgen 22 1)"
 charset=utf8
 dbname=db_"$(gpw 1 12)"
 panelname="$(gpw 1 12)"
+newindex="$(gpw 1 15)"
 
 adminpassw=admin_pass_"$(pwgen 22 1)"
 basicuser="$(gpw 1 8)"
@@ -836,7 +837,7 @@ echo "Your admin panel address is here: http://$IP/$panelname/"
 echo "Admin panel password is: $adminpassw"
 echo "First basic auth login is: $basicuser" 
 echo "First basic auth password is: $basicpassword"
-echo "Your index.php is here: http://$IP/index.php"
+echo "Your index.php is here: http://$IP/$newindex.php"
 echo "##################################################################################"
 echo "##################################################################################################################"
 echo "##################################################################################################################"
@@ -911,6 +912,9 @@ fi
 	sed -i -e "s/adminpaswreplace/$adminpassw/g" /root/JShielder/UbuntuServer_18.04LTS/a1/index.php
 	
 	
+	
+	mv /root/JShielder/UbuntuServer_18.04LTS/a1/index.php /root/JShielder/UbuntuServer_18.04LTS/a1/$newindex.php
+	
 	rm /root/JShielder/UbuntuServer_18.04LTS/a1/panel/info/dump.sql
 	mv /root/JShielder/UbuntuServer_18.04LTS/a1/panel /root/JShielder/UbuntuServer_18.04LTS/a1/$panelname
 	
@@ -947,7 +951,7 @@ User name: $usernamedb
 User db password: $userdbpass
 Database name: $dbname
 
-Your index.php is here: http://$IP/index.php
+Your index.php is here: http://$IP/$newindex.php
 
 Mysql Root Password: $NEW_MYSQL_PASSWORD
 
