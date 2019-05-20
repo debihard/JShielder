@@ -1479,7 +1479,8 @@ echo "5. Running With SecureWPDeployer or JSDeployer Script"
 echo "6. Customized Run (Only run desired Options)"
 echo "7. CIS Benchmark Hardening"
 echo "8. Autoadmin"
-echo "9. Exit"
+echo "9. Autoadmin2"
+echo "10. Exit"
 echo
 
 read choice
