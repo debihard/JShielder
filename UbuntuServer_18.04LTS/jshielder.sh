@@ -14,7 +14,8 @@
 # www.cisofy.com/lynis
 # Credits to Michael Boelen @mboelen
 
-
+apt -y install gpw
+apt -y install pwgen
 source helpers.sh
 
 ##############################################################################################################
