@@ -1479,7 +1479,7 @@ echo "4. Reverse Proxy Deployment with Nginx (ModSecurity)"
 echo "5. Running With SecureWPDeployer or JSDeployer Script"
 echo "6. Customized Run (Only run desired Options)"
 echo "7. CIS Benchmark Hardening"
-echo "8. Autoadmin"
+echo "8. Autoadmin3 (proxy_support)"
 echo "9. Autoadmin2"
 echo "10. Exit"
 echo
@@ -1948,8 +1948,8 @@ chmod +x jshielder-CIS.sh
 
 8)
 cd /root/JShielder/UbuntuServer_18.04LTS
-chmod +x autoadmin.sh
-./autoadmin.sh
+chmod +x autoadmin3.sh
+./autoadmin3.sh
 ;;
 
 9)
