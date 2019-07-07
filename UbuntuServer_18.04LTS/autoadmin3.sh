@@ -785,6 +785,33 @@ say_done
 	
 ##############################################################################################################
 
+#Extract archive
+extract_a2(){
+clear
+  f_banner
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo -e "\e[93m[+]\e[00m Extract a2"
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo ""
+  
+
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo -e "\e[93m[+]\e[00m Extract a2 archive. Please Enter Your Password!"
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+
+  apt -y install p7zip-full
+  echo ""
+  echo -n " Please Enter Your Password: "; read -s archivepassword
+  cd a2
+  7z x a2.7z -p$archivepassword; echo "extract archive OK"
+  rm a2.7z; echo "remove archive OK"
+  cd ..
+  echo " OK"
+say_done
+}
+	
+##############################################################################################################
+
 # Add manually the Generated Public Key
 rsa_add_manual(){
 publickey=$(</root/JShielder/UbuntuServer_18.04LTS/a1/publickey.txt)
@@ -798,6 +825,21 @@ srm /root/JShielder/UbuntuServer_18.04LTS/a1/publickey.txt
  }
    
 ##############################################################################################################
+
+# Add manually the Generated Public Key
+rsa_add_manual_a2(){
+publickey=$(</root/JShielder/UbuntuServer_18.04LTS/a2/publickey.txt)
+echo "$publickey" >> /home/$username/.ssh/authorized_keys
+srm /root/JShielder/UbuntuServer_18.04LTS/a2/publickey.txt
+ echo ""
+ spinner
+  echo "Your key is successfully add!"
+ 
+      say_done   
+ }
+   
+##############################################################################################################
+
 
 # Create mysql user and data base and copy
 
@@ -955,7 +997,168 @@ EOL
 }
 ##############################################################################################################
 
+# Create mysql user and data base and copy
 
+create_mysql_user_db_a2(){
+    clear
+    f_banner
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo -e "\e[93m[+]\e[00m Create MySQL user and database"
+    echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+    echo ""
+
+apt -y install pwgen
+apt -y install gpw
+
+# Autodetect IP address and pre-fill for the user
+IP="$(ip addr | grep 'inet' | grep -v inet6 | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)"
+usernamedb=dbuser_"$(gpw 1 12)"
+userdbpass=dbuser_pass_"$(pwgen 22 1)"
+charset=utf8
+dbname=db_"$(gpw 1 12)"
+panelname="$(gpw 1 12)"
+
+adminpassw=admin_pass_"$(pwgen 22 1)"
+basicuser="$(gpw 1 8)"
+basicpassword="$basicuser"_"$(pwgen 18 1)"
+
+
+echo "##################################################################################################################"
+echo "##################################################################################################################"
+echo "##################################################################################"
+echo "User name: $usernamedb"
+echo "User db password: $userdbpass"
+echo "Database name: $dbname"
+echo "Your admin panel address is here: http://$IP/$panelname/"
+echo "Admin panel password is: $adminpassw"
+echo "First basic auth login is: $basicuser" 
+echo "First basic auth password is: $basicpassword"
+echo "Your index.php is here: http://$IP/index.php"
+echo "##################################################################################"
+echo "##################################################################################################################"
+echo "##################################################################################################################"
+
+
+# Bash script written by Saad Ismail - me@saadismail.net
+
+# If /root/.my.cnf exists then it won't ask for root password
+if [ -f /root/.my.cnf ]; then
+	
+	echo "Creating new adminpanel database..."
+	mysql -e "CREATE DATABASE ${dbname} /*\!40100 DEFAULT CHARACTER SET ${charset} */;"
+	echo "Database successfully created!"
+	echo "Showing existing databases..."
+	mysql -e "show databases;"
+	echo ""
+	
+	echo "Creating new user..."
+	mysql -e "CREATE USER ${usernamedb}@localhost IDENTIFIED BY '${userdbpass}';"
+	echo "User successfully created!"
+	echo ""
+	echo "Granting ALL privileges on ${dbname} to ${usernamedb}!"
+	mysql -e "GRANT ALL PRIVILEGES ON ${dbname}.* TO '${usernamedb}'@'localhost';"
+	mysql -e "FLUSH PRIVILEGES;"
+	echo "You're good now :)"
+	echo ""
+	
+	echo "Importing mysql dump..."
+	
+	#mysql -u "$usernamedb" -p "$userdbpass" "$dbname" < /root/JShielder/UbuntuServer_18.04LTS/a2/panel/info/dump.sql
+	mysql --user=$usernamedb  --password=$userdbpass $dbname < /root/JShielder/UbuntuServer_18.04LTS/a2/panel/info/dump.sql
+	
+        echo "Importing mysql dump successfull!"
+
+# If /root/.my.cnf doesn't exist then it'll ask for root password	
+else
+	echo "Please enter root user MySQL password!"
+	read -s rootpasswd <<< $NEW_MYSQL_PASSWORD
+	echo "Creating new adminpanel database..."
+	mysql -e "CREATE DATABASE ${dbname} /*\!40100 DEFAULT CHARACTER SET ${charset} */;"
+	echo "Database successfully created!"
+	echo "Showing existing databases..."
+	mysql -e "show databases;"
+	echo ""
+	
+	echo "Creating new user..."
+	mysql -e "CREATE USER ${usernamedb}@localhost IDENTIFIED BY '${userdbpass}';"
+	echo "User successfully created!"
+	echo ""
+	echo "Granting ALL privileges on ${dbname} to ${usernamedb}!"
+	#mysql -e "GRANT ALL PRIVILEGES ON ${dbname}.* TO '${usernamedb}'@'localhost' WITH GRANT OPTION;"
+	mysql -e "GRANT ALL PRIVILEGES ON ${dbname}.* TO '${usernamedb}'@'localhost';"
+	mysql -e "FLUSH PRIVILEGES;"
+	echo "You're good now :)"
+	echo ""
+	
+	echo "Importing mysql dump..."
+	
+	mysql --user=$usernamedb --password=$userdbpass $dbname < /root/JShielder/UbuntuServer_18.04LTS/a2/panel/info/dump.sql
+	
+	echo "Importing mysql dump successfull!"
+fi
+     
+    echo "Setup Service Checker..."
+    
+    sed -i -e "s/panelreplace/$panelname/g" /root/JShielder/UbuntuServer_18.04LTS/a2/service.sh
+    bash /root/JShielder/UbuntuServer_18.04LTS/a2/service.sh
+    sleep 10
+	 
+    echo "Setup adminpanel..."
+        
+	sed -i -e "s/panelreplace/$panelname/g" /root/JShielder/UbuntuServer_18.04LTS/a2/index.php
+	sed -i -e "s/dbuserreplace/$usernamedb/g" /root/JShielder/UbuntuServer_18.04LTS/a2/index.php
+	sed -i -e "s/dbpassreplace/$userdbpass/g" /root/JShielder/UbuntuServer_18.04LTS/a2/index.php
+        sed -i -e "s/dbnamereplace/$dbname/g" /root/JShielder/UbuntuServer_18.04LTS/a2/index.php
+	sed -i -e "s/adminpaswreplace/$adminpassw/g" /root/JShielder/UbuntuServer_18.04LTS/a2/index.php
+	
+	
+	srm -v /root/JShielder/UbuntuServer_18.04LTS/a2/panel/info/dump.sql
+	srm -v /root/JShielder/UbuntuServer_18.04LTS/a2/service.sh
+	mv /root/JShielder/UbuntuServer_18.04LTS/a2/panel /root/JShielder/UbuntuServer_18.04LTS/a2/$panelname
+	
+
+#htpasswd -c /root/apache/.htpasswd $basicuser $basicpassword
+
+    cp -aR /root/JShielder/UbuntuServer_18.04LTS/a2/. /var/www/html/
+
+echo "Ok"
+
+find /var/www/ -type d -print0 | xargs -0 chmod 755
+find /var/www/ -type f -print0 | xargs -0 chmod 644
+
+chmod 777 /var/www/html/$panelname/proxylinks.txt
+chmod 777 /var/www/html/$panelname/links.txt
+chmod 777 /var/www/html/$panelname/config.json
+chmod 777 /var/www/html/$panelname/files/
+chown -R www-data:www-data /var/www
+
+htpasswd -b -c /etc/apache2/.htpasswd $basicuser $basicpassword
+
+touch /root/adminpanelsdata.txt
+cat > /root/adminpanelsdata.txt << EOL
+##################################################################################################################
+##################################################################################################################
+##################################################################################################################
+Your admin panel address is here: http://$IP/$panelname/
+Basic auth login is: $basicuser
+Basic auth password is: $basicpassword
+Admin panel password is: $adminpassw
+User name: $usernamedb
+User db password: $userdbpass
+Database name: $dbname
+Your index.php is here: http://$IP/index.php
+Mysql Root Password: $NEW_MYSQL_PASSWORD
+Server Root Password: $NEW_SERVER_ROOT_PASSWORD
+Server SSH Port is: 50099
+##################################################################################################################
+##################################################################################################################
+##################################################################################################################
+EOL
+
+
+     say_done
+}
+##############################################################################################################
 # Tune and Secure Kernel
 tune_secure_kernel(){
     clear
