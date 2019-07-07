@@ -1007,6 +1007,7 @@ create_mysql_user_db_a2(){
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
     echo ""
 
+apt -y install secure-delete
 apt -y install pwgen
 apt -y install gpw
 
@@ -1414,7 +1415,6 @@ srm_setup_info(){
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
     echo ""
     spinner
-    apt -y install secure-delete
     srm -rvz /root/JShielder
      srm -vz /root/adminpanelsdata.txt
      echo " OK"
