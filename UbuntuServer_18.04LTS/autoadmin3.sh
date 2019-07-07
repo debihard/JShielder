@@ -1523,7 +1523,7 @@ echo -e "\e[34m-----------------------------------------------------------------
 echo -e "\e[93m[+]\e[00m SELECT THE DESIRED OPTION"
 echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
 echo ""
-echo "1. A1"
+echo "1. A2"
 echo "2. Exit"
 echo
 
@@ -1548,10 +1548,10 @@ install_apache
 install_secure_php
 secure_optimize_apache
 config_fail2ban
-extract_a1
+extract_a2
 rsa_add_manual
 secure_ssh
-create_mysql_user_db_a1
+create_mysql_user_db_a2
 tune_secure_kernel
 install_rootkit_hunter
 tune_nano_vim_bashrc
