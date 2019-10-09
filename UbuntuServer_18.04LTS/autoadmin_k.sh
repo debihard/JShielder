@@ -769,7 +769,7 @@ clear
   
 
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-  echo -e "\e[93m[+]\e[00m Extract a1 archive. Please Enter Your Password!"
+  echo -e "\e[93m[+]\e[00m Extract ak archive. Please Enter Your Password!"
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
 
   apt -y install p7zip-full
