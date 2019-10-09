@@ -90,6 +90,7 @@ cd UbuntuServer_18.04LTS/
 chmod +x jshielder.sh
 #screen -S jshielder /root/JShielder/UbuntuServer_18.04LTS/jshielder.sh
 tmux new-session -d -s my_session ./jshielder.sh
+tmux attach
 ;;
 
 3)
