@@ -779,7 +779,11 @@ if [ -f $ARCHIVEPASS ]; then
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo ""
   
+  cd ak
   7z x ak.7z -p$archivepassword; echo "extract archive OK"
+  rm -f ak.7z; echo "remove archive OK"
+  cd ..
+  echo " OK"
   
  else 
   echo ""
