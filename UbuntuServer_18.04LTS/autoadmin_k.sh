@@ -503,6 +503,8 @@ install_secure_php(){
     mv /etc/php/7.2/apache2/php.ini.new /etc/php/7.2/apache2/php.ini; echo " OK"
     mv /etc/php/7.2/cli/php.ini.new /etc/php/7.2/cli/php.ini; echo " OK"
     
+    sed -i 's/session.cookie_secure/#session.cookie_secure/g' /etc/php/7.2/apache2/php.ini; echo " OK"
+    
     service apache2 restart
     say_done
 }
