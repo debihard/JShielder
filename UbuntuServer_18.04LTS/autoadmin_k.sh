@@ -834,7 +834,7 @@ basicpassword="$basicuser"_"$(pwgen 18 1)"
 guestlogin=guest_"$(pwgen 8 1)"
 guestpassword=guestpass_"$(pwgen 8 1)"
 adminlogin=adminlogin_"$(gpw 1 12)"
-adminpassw_md5=$(md5sum <<<"$adminpassw" | sed 's/ .*$//')
+adminpassw_md5=$(echo -n "$adminpassw" | md5sum | awk '{print $1}')
 
 echo "##################################################################################################################"
 echo "##################################################################################################################"
@@ -1342,18 +1342,18 @@ reboot_server(){
 clear
 f_banner
 echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-echo -e "\e[93m[+]\e[00m SELECT THE DESIRED OPTION"
+echo -e "\e[93m[+]\e[00m START INSTALL!!!"
 echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
 echo ""
-echo "1. AK"
-echo "2. Exit"
-echo
-
-read choice
-
-case $choice in
-
-1)
+#echo "1. AK"
+#echo "2. Exit"
+#echo
+#
+#read choice
+#
+#case $choice in
+#
+#1)
 check_root
 install_dep
 update_root_password
@@ -1386,11 +1386,11 @@ secure_tmp
 apache_conf_restrictions
 unattended_upgrades
 file_permissions
-;;
-
-2)
-exit 0
-;;
-
-esac
+#;;
+#
+#2)
+#exit 0
+#;;
+#
+#esac
 ##############################################################################################################
