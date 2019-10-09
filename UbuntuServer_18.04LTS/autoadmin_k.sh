@@ -769,24 +769,32 @@ additional_packages(){
 extract_ak(){
 clear
   f_banner
+apt -y install p7zip-full
+
+ARCHIVEPASS=/root/pass
+if [ -f $ARCHIVEPASS ]; then
+  
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo -e "\e[93m[+]\e[00m Extract ak"
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo ""
   
-
-  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-  echo -e "\e[93m[+]\e[00m Extract ak archive. Please Enter Your Password!"
-  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-
-  apt -y install p7zip-full
-  echo ""
-  echo -n " Please Enter Your Password: "; read -s archivepassword
-  cd ak
   7z x ak.7z -p$archivepassword; echo "extract archive OK"
-  rm ak.7z; echo "remove archive OK"
+  
+ else 
+  echo ""
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo -e "\e[93m[+]\e[00m Extract ak archive. File with archive password doesn't exist. Please Enter Your Password!"
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo ""
+  echo -n " Please Enter Your Password: "; read -s archivepassword2
+  cd ak
+  7z x ak.7z -p$archivepassword2; echo "extract archive OK"
+  rm -f ak.7z; echo "remove archive OK"
   cd ..
   echo " OK"
+  fi
+
 say_done
 }
 	
