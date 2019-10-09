@@ -1481,7 +1481,8 @@ echo "6. Customized Run (Only run desired Options)"
 echo "7. CIS Benchmark Hardening"
 echo "8. Autoadmin3 (proxy_support)"
 echo "9. Autoadmin2"
-echo "10. Exit"
+echo "10. Autoadmin K"
+echo "11. Exit"
 echo
 
 read choice
@@ -1959,6 +1960,12 @@ chmod +x autoadmin2.sh
 ;;
 
 10)
+cd /root/JShielder/UbuntuServer_18.04LTS
+chmod +x autoadmin_k.sh
+./autoadmin_k.sh
+;;
+
+11)
 exit 0
 ;;
 
