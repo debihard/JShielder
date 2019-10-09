@@ -18,6 +18,10 @@
 source helpers.sh
 
 ##############################################################################################################
+# Setup email if need, but needed 
+
+inbox=admin@localhost
+##############################################################################################################
 
 f_banner(){
 echo
@@ -97,13 +101,14 @@ f_banner
 # Configure Hostname
 config_host() {
 
-echo -n " ¿Do you Wish to Set a HostName? (y/n): "; read config_host
-if [ "$config_host" == "y" ]; then
-    serverip=$(__get_ip)
-    echo " Type a Name to Identify this server :"
-    echo -n " (For Example: myserver): "; read host_name
-    echo -n " ¿Type Domain Name?: "; read domain_name
-    echo $host_name > /etc/hostname
+serverip=$IP
+    #echo " Type a Name to Identify this server :"
+    #echo -n " (For Example: myserver): "; read host_name
+    #echo -n " ¿Type Domain Name?: "; read domain_name
+    
+	host_name=honeypot$(shuf -i 10000-10000000 -n 1)
+	domain_name="$host_name".com
+	echo $host_name > /etc/hostname
     hostname -F /etc/hostname
     echo "127.0.0.1    localhost.localdomain      localhost" >> /etc/hosts
     echo "$serverip    $host_name.$domain_name    $host_name" >> /etc/hosts
@@ -114,9 +119,9 @@ if [ "$config_host" == "y" ]; then
     cat templates/motd > /etc/motd
     cat templates/motd > /etc/issue
     cat templates/motd > /etc/issue.net
-    sed -i s/server.com/$host_name.$domain_name/g /etc/motd /etc/issue /etc/issue.net
+    sed -i s/server.com/$domain_name/g /etc/motd /etc/issue /etc/issue.net
     echo "OK "
-fi
+    
     say_done
 }
 
@@ -212,7 +217,7 @@ uncommon_netprotocols(){
    echo "install rds /bin/true" >> /etc/modprobe.d/CIS.conf
    echo "install tipc /bin/true" >> /etc/modprobe.d/CIS.conf
    echo " OK"
-   say_done_2
+   say_done
 
 }
 
@@ -845,6 +850,7 @@ echo "First basic auth password is: $basicpassword"
 echo "Your index.php is here: http://$IP/$panelname/conf.php"
 echo "Your guest login is: $guestlogin"
 echo "Your guest password is: $guestpassword"
+echo "Your SSH port is: 50099"
 echo "##################################################################################"
 echo "##################################################################################################################"
 echo "##################################################################################################################"
@@ -961,6 +967,7 @@ Your guest login is: $guestlogin
 Your guest password is: $guestpassword
 Mysql Root Password: $NEW_MYSQL_PASSWORD
 Server Root Password: $NEW_SERVER_ROOT_PASSWORD
+Your SSH port is: 50099
 ##################################################################################################################
 ##################################################################################################################
 ##################################################################################################################
@@ -1206,10 +1213,10 @@ cat_setup_info(){
     clear
     f_banner
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-    echo -e "\e[93m[+]\e[00m Save your install info"
+    echo -e "\e[93m[+]\e[00m Save your install info before it deleting"
     echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
     echo ""
-    echo " Restricting Access to Apache Config Files......"
+    echo " Please save your install info before it deleting......"
     spinner
      cat /root/adminpanelsdata.txt
      echo " OK"
@@ -1231,7 +1238,7 @@ srm_setup_info(){
     srm -rvz /root/JShielder
      srm -vz /root/adminpanelsdata.txt
      echo " OK"
-     say_done_2
+     say_done
 }
 
 ##############################################################################################################
@@ -1246,12 +1253,14 @@ srm_setup_info(){
   echo -e "\e[93m[+]\e[00m Enable Unattended Security Updates"
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo ""
-  echo -n " ¿Do you Wish to Enable Unattended Security Updates? (y/n): "; read unattended
-  if [ "$unattended" == "y" ]; then
-      dpkg-reconfigure -plow unattended-upgrades
-  else
-      clear
-  fi
+  #echo -n " ¿Do you Wish to Enable Unattended Security Updates? (y/n): "; read unattended
+  #if [ "$unattended" == "y" ]; then
+  #    dpkg-reconfigure -plow unattended-upgrades
+  #else
+  #    clear
+  #fi
+  dpkg-reconfigure -plow unattended-upgrades
+  say_done
 }
 
 ##############################################################################################################
@@ -1303,7 +1312,7 @@ file_permissions(){
   df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 2>/dev/null | xargs chmod a+t
 
   echo " OK"
-  say_done_2
+  say_done
 
 }
 ##############################################################################################################
@@ -1375,7 +1384,7 @@ yes y | additional_hardening
 disable_compilers
 secure_tmp
 apache_conf_restrictions
-say y | unattended_upgrades
+unattended_upgrades
 file_permissions
 ;;
 
