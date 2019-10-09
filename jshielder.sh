@@ -56,6 +56,7 @@ apt -y install screen
 apt -y install pwgen 
 apt -y install gpw
 apt -y install secure-delete
+apt -y install tmux
 
 menu=""
 until [ "$menu" = "10" ]; do
@@ -88,7 +89,7 @@ chmod +x jshielder.sh
 cd UbuntuServer_18.04LTS/
 chmod +x jshielder.sh
 #screen -S jshielder /root/JShielder/UbuntuServer_18.04LTS/jshielder.sh
-./jshielder.sh
+tmux new-session -d -s my_session ./jshielder.sh
 ;;
 
 3)
