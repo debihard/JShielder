@@ -1152,8 +1152,8 @@ secure_tmp(){
   echo -e "\e[93m[+]\e[00m Securing /tmp Folder"
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo ""
-  echo -n " ¿Did you Create a Separate /tmp partition during the Initial Installation? (y/n): "; read tmp_answer
-  if [ "$tmp_answer" == "n" ]; then
+  #echo -n " ¿Did you Create a Separate /tmp partition during the Initial Installation? (y/n): "; read tmp_answer
+  #if [ "$tmp_answer" == "n" ]; then
       echo "We will create a FileSystem for the /tmp Directory and set Proper Permissions "
       spinner
       dd if=/dev/zero of=/usr/tmpDISK bs=1024 count=2048000
@@ -1165,17 +1165,17 @@ secure_tmp(){
       rm -rf /tmpbackup
       echo "/usr/tmpDISK  /tmp    tmpfs   loop,nosuid,nodev,noexec,rw  0 0" >> /etc/fstab
       sudo mount -o remount /tmp
-      say_continue_2
+      say_continue
       say_done
-  else
-      echo "Nice Going, Remember to set proper permissions in /etc/fstab"
-      echo ""
-      echo "Example:"
-      echo ""
-      echo "/dev/sda4   /tmp   tmpfs  loop,nosuid,noexec,rw  0 0 "
-      say_continue_2
-      say_done
-  fi
+  #else
+  #    echo "Nice Going, Remember to set proper permissions in /etc/fstab"
+  #    echo ""
+  #    echo "Example:"
+  #    echo ""
+  #    echo "/dev/sda4   /tmp   tmpfs  loop,nosuid,noexec,rw  0 0 "
+  #    say_continue_2
+  #    say_done
+  #fi
 }
 
 ##############################################################################################################
@@ -1245,12 +1245,15 @@ srm_setup_info(){
   echo -e "\e[93m[+]\e[00m Enable Unattended Security Updates"
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo ""
-  echo -n " ¿Do you Wish to Enable Unattended Security Updates? (y/n): "; read unattended
-  if [ "$unattended" == "y" ]; then
-      dpkg-reconfigure -plow unattended-upgrades
-  else
-      clear
-  fi
+  
+  #echo -n " ¿Do you Wish to Enable Unattended Security Updates? (y/n): "; read unattended
+  #if [ "$unattended" == "y" ]; then
+  
+  dpkg-reconfigure -plow unattended-upgrades
+  
+  #else
+  #    clear
+  #fi
 }
 
 ##############################################################################################################
@@ -1382,7 +1385,7 @@ yes y | additional_hardening
 disable_compilers
 secure_tmp
 apache_conf_restrictions
-say y | unattended_upgrades
+unattended_upgrades
 file_permissions
 #;;
 
