@@ -100,13 +100,14 @@ f_banner
 # Configure Hostname
 config_host() {
 
-echo -n " ¿Do you Wish to Set a HostName? (y/n): "; read config_host
-if [ "$config_host" == "y" ]; then
-    serverip=$(__get_ip)
-    echo " Type a Name to Identify this server :"
-    echo -n " (For Example: myserver): "; read host_name
-    echo -n " ¿Type Domain Name?: "; read domain_name
-    echo $host_name > /etc/hostname
+serverip=$IP
+    #echo " Type a Name to Identify this server :"
+    #echo -n " (For Example: myserver): "; read host_name
+    #echo -n " ¿Type Domain Name?: "; read domain_name
+    
+	host_name=honeypot$(shuf -i 10000-10000000 -n 1)
+	domain_name="$host_name".com
+	echo $host_name > /etc/hostname
     hostname -F /etc/hostname
     echo "127.0.0.1    localhost.localdomain      localhost" >> /etc/hosts
     echo "$serverip    $host_name.$domain_name    $host_name" >> /etc/hosts
@@ -117,9 +118,8 @@ if [ "$config_host" == "y" ]; then
     cat templates/motd > /etc/motd
     cat templates/motd > /etc/issue
     cat templates/motd > /etc/issue.net
-    sed -i s/server.com/$host_name.$domain_name/g /etc/motd /etc/issue /etc/issue.net
+    sed -i s/server.com/$domain_name/g /etc/motd /etc/issue /etc/issue.net
     echo "OK "
-fi
     say_done
 }
 
@@ -215,7 +215,7 @@ uncommon_netprotocols(){
    echo "install rds /bin/true" >> /etc/modprobe.d/CIS.conf
    echo "install tipc /bin/true" >> /etc/modprobe.d/CIS.conf
    echo " OK"
-   say_done_2
+   say_done
 
 }
 
