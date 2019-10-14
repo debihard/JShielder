@@ -14,6 +14,9 @@
 # www.cisofy.com/lynis
 # Credits to Michael Boelen @mboelen
 
+##############################################################################################################
+archivepassword=$(cat /root/pass)
+##############################################################################################################
 
 source helpers.sh
 
@@ -759,27 +762,35 @@ additional_packages(){
 
 ##############################################################################################################
 #Extract archive
-extract_a1(){
-clear
-  f_banner
+
+ARCHIVEPASS=/root/pass
+if [ -f $ARCHIVEPASS ]; then
+  
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo -e "\e[93m[+]\e[00m Extract a1"
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo ""
   
-
-  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-  echo -e "\e[93m[+]\e[00m Extract a1 archive. Please Enter Your Password!"
-  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-
-  apt -y install p7zip-full
-  echo ""
-  echo -n " Please Enter Your Password: "; read -s archivepassword
-  cd a1
+  cd ak
   7z x a1.7z -p$archivepassword; echo "extract archive OK"
-  rm a1.7z; echo "remove archive OK"
+  rm -f a1.7z; echo "remove archive OK"
   cd ..
   echo " OK"
+  
+ else 
+  echo ""
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo -e "\e[93m[+]\e[00m Extract a1 archive. File with archive password doesn't exist. Please Enter Your Password!"
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo ""
+  echo -n " Please Enter Your Password: "; read -s archivepassword2
+  cd a1
+  7z x a1.7z -p$archivepassword2; echo "extract archive OK"
+  rm -f a1.7z; echo "remove archive OK"
+  cd ..
+  echo " OK"
+  fi
+
 say_done
 }
 	
