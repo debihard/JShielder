@@ -762,6 +762,10 @@ additional_packages(){
 
 ##############################################################################################################
 #Extract archive
+extract_a1(){
+clear
+f_banner
+apt -y install p7zip-full
 
 ARCHIVEPASS=/root/pass
 if [ -f $ARCHIVEPASS ]; then
