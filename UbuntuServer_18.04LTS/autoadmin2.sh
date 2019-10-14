@@ -1327,19 +1327,27 @@ reboot_server(){
 
 clear
 f_banner
+#echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+#echo -e "\e[93m[+]\e[00m SELECT THE DESIRED OPTION"
+#echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+#echo ""
+#echo "1. A1"
+#echo "2. Exit"
+#echo
+
+#read choice
+
+#case $choice in
+
+#1)
+
+clear
+f_banner
 echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
-echo -e "\e[93m[+]\e[00m SELECT THE DESIRED OPTION"
+echo -e "\e[93m[+]\e[00m START INSTALL!!!"
 echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
 echo ""
-echo "1. A1"
-echo "2. Exit"
-echo
 
-read choice
-
-case $choice in
-
-1)
 check_root
 install_dep
 update_root_password
@@ -1372,11 +1380,11 @@ secure_tmp
 apache_conf_restrictions
 say y | unattended_upgrades
 file_permissions
-;;
+#;;
 
-2)
-exit 0
-;;
+#2)
+#exit 0
+#;;
 
-esac
+#esac
 ##############################################################################################################
