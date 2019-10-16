@@ -64,6 +64,29 @@ fi
 }
 
 ##############################################################################################################
+check_encryptionkey(){
+ENCRYPTIONKEYCHECK=/root/key
+if [ -f $ENCRYPTIONKEYCHECK ]; then
+  
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo -e "\e[93m[+]\e[00m Check if encryption key exist"
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo ""
+  
+  sed -i -e "s/encryptionkeyreplace/$encryptionkey/g" /root/JShielder/UbuntuServer_18.04LTS/ak/panel/global.php
+  echo "Encryption Key Exist - OK"
+  
+ else 
+  echo ""
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo -e "\e[93m[+]\e[00m Please don't forget create /root/key with encryption key or you can paste it later"
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo ""
+  fi
+
+say_done2
+}
+##############################################################################################################
 
 # Installing Dependencies
 # Needed Prerequesites will be set up here
