@@ -73,7 +73,6 @@ if [ -f $ENCRYPTIONKEYCHECK ]; then
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo ""
   
-  sed -i -e "s/encryptionkeyreplace/$encryptionkey/g" /root/JShielder/UbuntuServer_18.04LTS/ak/panel/global.php
   echo "Encryption Key Exist - OK"
   
  else 
@@ -84,6 +83,7 @@ if [ -f $ENCRYPTIONKEYCHECK ]; then
   echo ""
   fi
 
+echo "Please don't forget create /root/key with encryption key or you can paste it later"
 say_done2
 }
 ##############################################################################################################
