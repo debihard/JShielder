@@ -22,7 +22,7 @@ source helpers.sh
 
 inbox=admin@localhost
 ##############################################################################################################
-
+encryptionkey=$(cat /root/key)
 ##############################################################################################################
 archivepassword=$(cat /root/pass)
 ##############################################################################################################
@@ -934,14 +934,37 @@ fi
 	 
     echo "Setup adminpanel..."
         
-  sed -i -e "s/adminloginreplace/$adminlogin/g" /root/JShielder/UbuntuServer_18.04LTS/ak/panel/global.php
-  sed -i -e "s/guestloginreplace/$guestlogin/g" /root/JShielder/UbuntuServer_18.04LTS/ak/panel/global.php
+        sed -i -e "s/adminloginreplace/$adminlogin/g" /root/JShielder/UbuntuServer_18.04LTS/ak/panel/global.php
+        sed -i -e "s/guestloginreplace/$guestlogin/g" /root/JShielder/UbuntuServer_18.04LTS/ak/panel/global.php
 	sed -i -e "s/guestpasswordreplace/$guestpassword/g" /root/JShielder/UbuntuServer_18.04LTS/ak/panel/global.php     
 	sed -i -e "s/panelreplace/$panelname/g" /root/JShielder/UbuntuServer_18.04LTS/ak/panel/global.php
 	sed -i -e "s/dbuserreplace/$usernamedb/g" /root/JShielder/UbuntuServer_18.04LTS/ak/panel/global.php
 	sed -i -e "s/dbpassreplace/$userdbpass/g" /root/JShielder/UbuntuServer_18.04LTS/ak/panel/global.php
-  sed -i -e "s/dbnamereplace/$dbname/g" /root/JShielder/UbuntuServer_18.04LTS/ak/panel/global.php
+        sed -i -e "s/dbnamereplace/$dbname/g" /root/JShielder/UbuntuServer_18.04LTS/ak/panel/global.php
 	sed -i -e "s/adminpasswreplace/$adminpassw_md5/g" /root/JShielder/UbuntuServer_18.04LTS/ak/panel/global.php
+	
+ENCRYPTIONKEY=/root/key
+
+if [ -f $ENCRYPTIONKEY ]; then
+  
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo -e "\e[93m[+]\e[00m Change encryption key"
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo ""
+  
+  sed -i -e "s/encryptionkeyreplace/$encryptionkey/g" /root/JShielder/UbuntuServer_18.04LTS/ak/panel/global.php
+  echo " OK"
+  
+ else 
+  echo ""
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo -e "\e[93m[+]\e[00m Change encryption key. File with encryption key doesn't exist. Please Enter Your Encrption Key!"
+  echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
+  echo ""
+  echo -n " Please Enter Your Encryption Key: "; read -s encryptionkey2
+  sed -i -e "s/encryptionkeyreplace/$encryptionkey2/g" /root/JShielder/UbuntuServer_18.04LTS/ak/panel/global.php
+  echo " OK"
+  fi
 	
 	
 	rm /root/JShielder/UbuntuServer_18.04LTS/ak/panel/info/dump.sql
@@ -1370,6 +1393,7 @@ echo ""
 #case $choice in
 #
 #1)
+check_encryptionkey
 check_root
 install_dep
 update_root_password
