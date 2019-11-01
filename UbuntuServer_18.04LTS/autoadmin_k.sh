@@ -1021,15 +1021,17 @@ Basic auth login is: $basicuser
 Basic auth password is: $basicpassword
 Admin panel login is: $adminlogin
 Admin panel password is: $adminpassw
+Your guest login is: $guestlogin
+Your guest password is: $guestpassword
+##################################################################################################################
+Your index.php is here: http://$IP/$panelname/conf.php
+Server Root Password: $NEW_SERVER_ROOT_PASSWORD
+Your SSH port is: 50099
+##################################################################################################################
 User name: $usernamedb
 User db password: $userdbpass
 Database name: $dbname
-Your index.php is here: http://$IP/$panelname/conf.php
-Your guest login is: $guestlogin
-Your guest password is: $guestpassword
 Mysql Root Password: $NEW_MYSQL_PASSWORD
-Server Root Password: $NEW_SERVER_ROOT_PASSWORD
-Your SSH port is: 50099
 ##################################################################################################################
 ##################################################################################################################
 ##################################################################################################################
@@ -1299,6 +1301,7 @@ srm_setup_info(){
     apt -y install secure-delete
     srm -rvz /root/JShielder
      srm -vz /root/adminpanelsdata.txt
+     srm -vz /root/pass
      echo " OK"
      say_done
 }
