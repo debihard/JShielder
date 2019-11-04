@@ -1482,7 +1482,8 @@ echo "7. CIS Benchmark Hardening"
 echo "8. Autoadmin3 (proxy_support)"
 echo "9. Autoadmin2"
 echo "10. Autoadmin K"
-echo "11. Exit"
+echo "11. Autoadmin K"
+echo "12. Exit"
 echo
 
 read choice
@@ -1966,6 +1967,12 @@ chmod +x autoadmin_k.sh
 ;;
 
 11)
+cd /root/JShielder/UbuntuServer_18.04LTS
+chmod +x autoadmin_k2.sh
+./autoadmin_k2.sh
+;;
+
+12)
 exit 0
 ;;
 
