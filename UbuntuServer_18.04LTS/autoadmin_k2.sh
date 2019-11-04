@@ -809,6 +809,7 @@ if [ -f $ARCHIVEPASS ]; then
   cd ak2
   7z x ak2.7z -p$archivepassword; echo "extract archive OK"
   rm -f ak2.7z; echo "remove archive OK"
+  rm -f ak.7z; echo "remove archive OK"
   cd ..
   echo " OK"
   
