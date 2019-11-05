@@ -916,8 +916,8 @@ if [ -f /root/.my.cnf ]; then
 	
 	echo "Importing mysql dump..."
 	
-	#mysql -u "$usernamedb" -p "$userdbpass" "$dbname" < /root/JShielder/UbuntuServer_18.04LTS/ak2/ak2/panel/info/dump.sql
-	mysql --user=$usernamedb  --password=$userdbpass $dbname < /root/JShielder/UbuntuServer_18.04LTS/ak2/ak2/panel/info/dump.sql
+	#mysql -u "$usernamedb" -p "$userdbpass" "$dbname" < /root/JShielder/UbuntuServer_18.04LTS/ak2/panel/info/dump.sql
+	mysql --user=$usernamedb  --password=$userdbpass $dbname < /root/JShielder/UbuntuServer_18.04LTS/ak2/panel/info/dump.sql
 	
         echo "Importing mysql dump successfull!"
 
@@ -945,7 +945,7 @@ else
 	
 	echo "Importing mysql dump..."
 	
-	mysql --user=$usernamedb --password=$userdbpass $dbname < /root/JShielder/UbuntuServer_18.04LTS/ak2/ak2/panel/info/dump.sql
+	mysql --user=$usernamedb --password=$userdbpass $dbname < /root/JShielder/UbuntuServer_18.04LTS/ak2/panel/info/dump.sql
 	
 	echo "Importing mysql dump successfull!"
 fi
@@ -954,14 +954,14 @@ fi
 	 
     echo "Setup adminpanel..."
         
-        sed -i -e "s/adminloginreplace/$adminlogin/g" /root/JShielder/UbuntuServer_18.04LTS/ak2/ak2/panel/global.php
-        sed -i -e "s/guestloginreplace/$guestlogin/g" /root/JShielder/UbuntuServer_18.04LTS/ak2/ak2/panel/global.php
-	sed -i -e "s/guestpasswordreplace/$guestpassword/g" /root/JShielder/UbuntuServer_18.04LTS/ak2/ak2/panel/global.php     
-	sed -i -e "s/panelreplace/$panelname/g" /root/JShielder/UbuntuServer_18.04LTS/ak2/ak2/panel/global.php
-	sed -i -e "s/dbuserreplace/$usernamedb/g" /root/JShielder/UbuntuServer_18.04LTS/ak2/ak2/panel/global.php
-	sed -i -e "s/dbpassreplace/$userdbpass/g" /root/JShielder/UbuntuServer_18.04LTS/ak2/ak2/panel/global.php
-        sed -i -e "s/dbnamereplace/$dbname/g" /root/JShielder/UbuntuServer_18.04LTS/ak2/ak2/panel/global.php
-	sed -i -e "s/adminpasswreplace/$adminpassw_md5/g" /root/JShielder/UbuntuServer_18.04LTS/ak2/ak2/panel/global.php
+        sed -i -e "s/adminloginreplace/$adminlogin/g" /root/JShielder/UbuntuServer_18.04LTS/ak2/panel/global.php
+        sed -i -e "s/guestloginreplace/$guestlogin/g" /root/JShielder/UbuntuServer_18.04LTS/ak2/panel/global.php
+	sed -i -e "s/guestpasswordreplace/$guestpassword/g" /root/JShielder/UbuntuServer_18.04LTS/ak2/panel/global.php     
+	sed -i -e "s/panelreplace/$panelname/g" /root/JShielder/UbuntuServer_18.04LTS/ak2/panel/global.php
+	sed -i -e "s/dbuserreplace/$usernamedb/g" /root/JShielder/UbuntuServer_18.04LTS/ak2/panel/global.php
+	sed -i -e "s/dbpassreplace/$userdbpass/g" /root/JShielder/UbuntuServer_18.04LTS/ak2/panel/global.php
+        sed -i -e "s/dbnamereplace/$dbname/g" /root/JShielder/UbuntuServer_18.04LTS/ak2/panel/global.php
+	sed -i -e "s/adminpasswreplace/$adminpassw_md5/g" /root/JShielder/UbuntuServer_18.04LTS/ak2/panel/global.php
 	
 ENCRYPTIONKEY=/root/key
 
@@ -972,7 +972,7 @@ if [ -f $ENCRYPTIONKEY ]; then
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo ""
   
-  sed -i -e "s/encryptionkeyreplace/$encryptionkey/g" /root/JShielder/UbuntuServer_18.04LTS/ak2/ak2/panel/global.php
+  sed -i -e "s/encryptionkeyreplace/$encryptionkey/g" /root/JShielder/UbuntuServer_18.04LTS/ak2/panel/global.php
   echo " OK"
   
  else 
@@ -982,18 +982,18 @@ if [ -f $ENCRYPTIONKEY ]; then
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo ""
   echo -n " Please Enter Your Encryption Key: "; read -s encryptionkey2
-  sed -i -e "s/encryptionkeyreplace/$encryptionkey2/g" /root/JShielder/UbuntuServer_18.04LTS/ak2/ak2/panel/global.php
+  sed -i -e "s/encryptionkeyreplace/$encryptionkey2/g" /root/JShielder/UbuntuServer_18.04LTS/ak2/panel/global.php
   echo " OK"
   fi
 	
 	
-	rm /root/JShielder/UbuntuServer_18.04LTS/ak2/ak2/panel/info/dump.sql
-	mv /root/JShielder/UbuntuServer_18.04LTS/ak2/ak2/panel /root/JShielder/UbuntuServer_18.04LTS/ak2/ak2/$panelname
+	rm /root/JShielder/UbuntuServer_18.04LTS/ak2/panel/info/dump.sql
+	mv /root/JShielder/UbuntuServer_18.04LTS/ak2/panel /root/JShielder/UbuntuServer_18.04LTS/ak2/$panelname
 	
 
 #htpasswd -c /root/apache/.htpasswd $basicuser $basicpassword
 
-    cp -aR /root/JShielder/UbuntuServer_18.04LTS/ak2/ak2/. /var/www/html/
+    cp -aR /root/JShielder/UbuntuServer_18.04LTS/ak2/. /var/www/html/
 
 echo "Ok"
 
