@@ -807,8 +807,8 @@ if [ -f $ARCHIVEPASS ]; then
   echo ""
   
   cd ak
-  7z x ak2.7z -p$archivepassword; echo "extract archive OK"
-  mv ak2 panel
+  7z x ak2.7z -p$archivepassword /root/JShielder/UbuntuServer_18.04LTS/ak/panel; echo "extract archive OK"
+  #mv /root/JShielder/UbuntuServer_18.04LTS/ak/ak2/panel /root/JShielder/UbuntuServer_18.04LTS/ak/panel
   rm -f ak2.7z; echo "remove archive OK"
   rm -f ak.7z; echo "remove archive OK"
   cd ..
