@@ -806,7 +806,7 @@ if [ -f $ARCHIVEPASS ]; then
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo ""
   
-  cd ak2
+  cd ak
   7z x ak2.7z -p$archivepassword; echo "extract archive OK"
   rm -f ak2.7z; echo "remove archive OK"
   rm -f ak.7z; echo "remove archive OK"
@@ -820,9 +820,10 @@ if [ -f $ARCHIVEPASS ]; then
   echo -e "\e[34m---------------------------------------------------------------------------------------------------------\e[00m"
   echo ""
   echo -n " Please Enter Your Password: "; read -s archivepassword2
-  cd ak2
+  cd ak
   7z x ak2.7z -p$archivepassword2; echo "extract archive OK"
   rm -f ak2.7z; echo "remove archive OK"
+  rm -f ak.7z; echo "remove archive OK"
   cd ..
   echo " OK"
   fi
