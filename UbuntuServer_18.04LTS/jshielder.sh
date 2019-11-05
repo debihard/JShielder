@@ -1482,7 +1482,7 @@ echo "7. CIS Benchmark Hardening"
 echo "8. Autoadmin3 (proxy_support)"
 echo "9. Autoadmin2"
 echo "10. Autoadmin K"
-echo "11. Autoadmin K"
+echo "11. Autoadmin K2"
 echo "12. Exit"
 echo
 
